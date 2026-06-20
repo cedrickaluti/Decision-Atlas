@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Decision Atlas — a field guide to deciding well</title>
+<title>Cedric's Decision Atlas — a field guide to deciding well</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -252,6 +252,21 @@
   .copied{color:var(--biz);font-size:12.5px;font-family:"IBM Plex Mono",monospace;margin-left:6px}
 
   footer{border-top:1px solid var(--line);margin-top:50px;padding:24px 0 60px}
+  /* about */
+  .about-wrap{max-width:760px}
+  .about-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;box-shadow:var(--shadow);margin-bottom:16px}
+  .about-card h3{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--ink-faint);margin:0 0 12px;display:flex;align-items:center;gap:10px}
+  .about-card h3::after{content:"";flex:1;height:1px;background:var(--line-soft)}
+  .about-card p{margin:0 0 10px;font-size:15px}
+  .about-card p:last-child{margin-bottom:0}
+  .credits{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:2px 26px}
+  @media(max-width:620px){.credits{grid-template-columns:1fr}}
+  .credits li{font-size:13.5px;padding:6px 0;border-bottom:1px dashed var(--line-soft);line-height:1.4}
+  .credits li b{font-weight:700}
+  .credits li span{color:var(--ink-soft);display:block;font-size:12.5px}
+  .modes-legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+  .modes-legend b{font-weight:700}
   footer p{font-size:12.5px;color:var(--ink-faint);font-family:"IBM Plex Mono",monospace;letter-spacing:.02em;margin:0;max-width:80ch}
   .skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:var(--ink);color:#fff;padding:8px 12px;border-radius:8px;z-index:99}
 </style>
@@ -262,8 +277,8 @@
   <div class="wrap">
     <div class="brandrow">
       <div>
-        <div class="eyebrow">A field guide to deciding well</div>
-        <h1 class="title">Decision <em>Atlas</em></h1>
+        <div class="eyebrow">Cedric&rsquo;s field guide to deciding well</div>
+        <h1 class="title">Cedric&rsquo;s Decision <em>Atlas</em></h1>
         <p class="tagline"><span id="fwcount">Twenty-three</span> frameworks for thinking clearly under uncertainty — matched to your situation, explained in plain terms, and built into tools you can actually use.</p>
       </div>
     </div>
@@ -281,6 +296,7 @@
     <button class="tab" role="tab" aria-selected="true" data-view="match"><span class="num">01</span>Match</button>
     <button class="tab" role="tab" aria-selected="false" data-view="library"><span class="num">02</span>Library</button>
     <button class="tab" role="tab" aria-selected="false" data-view="tools"><span class="num">03</span>Tools</button>
+    <button class="tab" role="tab" aria-selected="false" data-view="about"><span class="num">04</span>About</button>
   </div>
 </nav>
 
@@ -396,6 +412,63 @@
           </div>
           <div class="toolbar"><button class="minibtn" id="copyPm">Copy worksheet</button><span class="copied" id="pmCopied"></span></div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="view" id="view-about">
+    <div class="wrap about-wrap">
+      <p class="sectlabel">Mode 04 — About</p>
+      <h2 class="h">About this Atlas</h2>
+      <p class="lede">A field guide to deciding well — 23 decision-making frameworks matched to the decision in front of you, explained in plain terms, and built into tools you can actually use.</p>
+
+      <div class="about-card">
+        <h3>The idea</h3>
+        <p>There's no single "best" decision framework — only a best fit for the situation. This Atlas is organized around the two factors that determine fit most: how <b>reversible</b> a decision is, and how <b>knowable</b> the situation is. Reversible, clear calls deserve fast and cheap methods; irreversible, uncertain ones deserve slow, bias-resistant ones. The most common mistake is treating an easily-reversed decision with the heavy process only a permanent one warrants — that's how people and teams get slow.</p>
+      </div>
+
+      <div class="about-card">
+        <h3>The three working modes</h3>
+        <p><b>Match</b> — answer up to four questions; the map lights up the right region and ranks your best-fit frameworks, breaking ties toward the most purpose-built one.</p>
+        <p><b>Library</b> — all 23 frameworks, filterable by domain or trait, each with how to run it, an example, and a watch-out.</p>
+        <p><b>Tools</b> — four working templates: a weighted decision matrix, RICE calculator, Eisenhower sorter, and pre-mortem worksheet, each with a copy button.</p>
+      </div>
+
+      <div class="about-card">
+        <h3>Credits &amp; attributions</h3>
+        <p>This Atlas stands entirely on the work of the people and groups who created these frameworks. It only summarizes and organizes their ideas.</p>
+        <ul class="credits">
+          <li><b>Weighted Decision Matrix</b> <span>Stuart Pugh (Pugh matrix)</span></li>
+          <li><b>Cynefin</b> <span>Dave Snowden</span></li>
+          <li><b>OODA Loop</b> <span>John Boyd</span></li>
+          <li><b>Eisenhower Matrix</b> <span>Named for Dwight D. Eisenhower; popularized by Stephen Covey</span></li>
+          <li><b>RICE Scoring</b> <span>Sean McBride, at Intercom</span></li>
+          <li><b>ICE Scoring</b> <span>Sean Ellis</span></li>
+          <li><b>MoSCoW</b> <span>Dai Clegg</span></li>
+          <li><b>Kano Model</b> <span>Noriaki Kano</span></li>
+          <li><b>Weighted Shortest Job First</b> <span>Don Reinertsen; adopted by SAFe</span></li>
+          <li><b>One-Way vs Two-Way Doors</b> <span>Jeff Bezos (Type 1 / Type 2)</span></li>
+          <li><b>Regret Minimization</b> <span>Jeff Bezos</span></li>
+          <li><b>10/10/10 Rule</b> <span>Suzy Welch</span></li>
+          <li><b>WRAP</b> <span>Chip Heath &amp; Dan Heath</span></li>
+          <li><b>Pre-mortem</b> <span>Gary Klein</span></li>
+          <li><b>Six Thinking Hats</b> <span>Edward de Bono</span></li>
+          <li><b>DACI</b> <span>Developed at Intuit</span></li>
+          <li><b>RAPID</b> <span>Bain &amp; Company</span></li>
+          <li><b>Cost-Benefit Analysis</b> <span>19th-c. welfare economics; Jules Dupuit</span></li>
+          <li><b>Expected Value / Decision Trees</b> <span>Pascal &amp; Fermat; decision theory (Raiffa)</span></li>
+          <li><b>Inversion</b> <span>C. G. J. Jacobi; popularized by Charlie Munger</span></li>
+          <li><b>Second-Order Thinking</b> <span>Systems thinking; popularized by Howard Marks</span></li>
+          <li><b>Satisficing vs Maximizing</b> <span>Herbert A. Simon</span></li>
+          <li><b>Pros &amp; Cons (Moral Algebra)</b> <span>Benjamin Franklin</span></li>
+        </ul>
+      </div>
+
+      <div class="about-card">
+        <h3>Good to know</h3>
+        <p><b>No tracking, no backend.</b> Nothing you type is stored or sent anywhere — everything runs in your browser. The only external resource loaded is Google Fonts.</p>
+        <p><b>Not advice.</b> The Atlas is a thinking aid, not financial, legal, or medical advice. The call is always yours.</p>
       </div>
     </div>
   </section>
@@ -958,7 +1031,7 @@ function fallbackCopy(t){const ta=document.createElement('textarea');ta.value=t;
 function flash(id){const el=$('#'+id);if(!el)return;el.textContent='✓ copied';setTimeout(()=>el.textContent='',1800);}
 
 /* footnote */
-$('#footnote').textContent='Decision Atlas — '+FW.length+' frameworks across business, personal, product, and team decisions. A thinking aid, not financial, legal, or medical advice; the call is always yours. Nothing here is stored or sent anywhere.';
+$('#footnote').textContent="Cedric's Decision Atlas — "+FW.length+' frameworks across business, personal, product, and team decisions. A thinking aid, not financial, legal, or medical advice; the call is always yours. Nothing here is stored or sent anywhere.';
 
 /* ========================================================= INIT */
 $('#fwcount').textContent=FW.length;
