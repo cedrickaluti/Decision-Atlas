@@ -77,6 +77,10 @@ The Atlas stands entirely on the work of the people and groups who created these
 - **Satisficing vs Maximizing** — Herbert A. Simon
 - **Pros & Cons (Moral Algebra)** — Benjamin Franklin
 
+## Disclaimer
+
+This Atlas was **developed for Cedric's own personal use** and is shared **as-is**, with no warranties of any kind, express or implied. Anyone else who chooses to use it does so **entirely at their own risk**. Cedric accepts **no responsibility or liability** for any decisions made or outcomes arising from its use. It is a thinking aid only — not financial, legal, or medical advice.
+
 ## License
 
-Personal project — use, adapt, and share it however you like. If you'd like a formal license, drop an MIT `LICENSE` file in the repo.
+Personal project. If you'd like a formal license, drop an MIT `LICENSE` file in the repo.
