@@ -22,6 +22,7 @@
     --personal:#B05E3A;/* personal */
     --product:#47509B; /* product / eng */
     --team:#6B7836;    /* team / management */
+    --family:#A03B7E;  /* family / household */
     --radius:14px;
     --shadow:0 1px 0 rgba(36,31,43,.04), 0 8px 30px -18px rgba(36,31,43,.28);
     --maxw:1160px;
@@ -51,9 +52,12 @@
     font-size:clamp(40px,7vw,76px);line-height:.96;letter-spacing:-.01em;margin:.1em 0 .15em}
   h1.title em{font-style:italic;color:var(--gold)}
   .tagline{max-width:46ch;color:var(--ink-soft);font-size:16.5px;margin:0}
-  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px}
-  .legend span{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft);
-    font-family:"IBM Plex Mono",monospace;letter-spacing:.02em}
+  .legend{display:flex;gap:8px 12px;flex-wrap:wrap;margin-top:14px;align-items:center}
+  .legend-item{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft);
+    font-family:"IBM Plex Mono",monospace;letter-spacing:.02em;background:none;border:1px solid transparent;
+    border-radius:999px;padding:5px 10px;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+  .legend-item:hover{color:var(--ink);border-color:var(--line);background:var(--panel)}
+  .legend-hint{font-size:11px;color:var(--ink-faint);font-family:"IBM Plex Mono",monospace;letter-spacing:.04em}
   .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
 
   /* ---------- mode tabs ---------- */
@@ -111,11 +115,12 @@
   .mapsvg{width:100%;height:auto;display:block;touch-action:manipulation}
   .axis-label{font-family:"IBM Plex Mono",monospace;font-size:10.5px;fill:var(--ink-faint);letter-spacing:.08em;text-transform:uppercase}
   .quad-label{font-family:"IBM Plex Mono",monospace;font-size:10px;fill:var(--ink-faint);letter-spacing:.05em}
-  .node circle{cursor:pointer;transition:r .2s, opacity .25s, stroke-width .2s}
+  .node .pt{cursor:pointer;transition:r .2s, opacity .25s, stroke-width .2s}
+  .node .hit{cursor:pointer}
   .node text{font-size:10.5px;fill:var(--ink-soft);font-weight:600;pointer-events:none;opacity:0;transition:opacity .2s}
-  .node.hot circle{stroke:var(--ink);stroke-width:2}
+  .node.hot .pt{stroke:var(--ink);stroke-width:2}
   .node.hot text{opacity:1}
-  .node.dim circle{opacity:.22}
+  .node.dim .pt{opacity:.22}
   .node:hover text{opacity:1}
 
   /* recommendations */
@@ -146,7 +151,10 @@
   .fchip.dom-personal[aria-pressed="true"]{background:var(--personal)}
   .fchip.dom-product[aria-pressed="true"]{background:var(--product)}
   .fchip.dom-team[aria-pressed="true"]{background:var(--team)}
+  .fchip.dom-family[aria-pressed="true"]{background:var(--family)}
   .fchip.attr[aria-pressed="true"]{background:var(--ink)}
+  .fchip.all[aria-pressed="true"]{background:var(--ink)}
+  .matchfocus{margin:2px 0 22px}
   .search{flex:1;min-width:180px;border:1px solid var(--line);background:var(--panel);border-radius:999px;
     padding:8px 16px;font-size:14px;font-family:inherit;color:var(--ink)}
   .search::placeholder{color:var(--ink-faint)}
@@ -167,6 +175,7 @@
     padding:2px 7px;border-radius:5px;color:#fff}
   .tag-dom.business{background:var(--biz)}.tag-dom.personal{background:var(--personal)}
   .tag-dom.product{background:var(--product)}.tag-dom.team{background:var(--team)}
+  .tag-dom.family{background:var(--family)}
   .tag-attr{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.03em;
     padding:2px 7px;border-radius:5px;border:1px solid var(--line);color:var(--ink-soft)}
   .noresults{grid-column:1/-1;text-align:center;color:var(--ink-faint);padding:40px;border:1px dashed var(--line);border-radius:12px}
@@ -269,6 +278,47 @@
   .modes-legend b{font-weight:700}
   footer p{font-size:12.5px;color:var(--ink-faint);font-family:"IBM Plex Mono",monospace;letter-spacing:.02em;margin:0;max-width:80ch}
   .skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:var(--ink);color:#fff;padding:8px 12px;border-radius:8px;z-index:99}
+
+  /* ---------- mobile ---------- */
+  @media(max-width:640px){
+    body{font-size:15.5px}
+    .wrap{padding:0 16px}
+    header.site{padding:20px 0 4px}
+    h1.title{font-size:clamp(38px,12vw,52px)}
+    .tagline{font-size:15px}
+    .legend{gap:6px 10px;margin-top:12px}
+    .legend-item{font-size:11px;padding:4px 8px}
+    /* tab strip scrolls horizontally instead of overflowing */
+    .modes{margin-top:16px}
+    .modes-inner{padding:8px 12px;gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+    .modes-inner::-webkit-scrollbar{display:none}
+    .tab{padding:8px 13px;font-size:14px;white-space:nowrap;flex:0 0 auto}
+    main{padding:22px 0 64px}
+    h2.h{font-size:24px}
+    .lede{font-size:15px;margin-bottom:18px}
+    .match-grid{gap:18px}
+    .qcard{padding:16px 16px 6px}
+    .mapcard{padding:14px}
+    .opt{font-size:13px;padding:8px 11px}
+    .opt small{font-size:10.5px}
+    .rec{padding:12px 13px;gap:11px}
+    .rec .rank{font-size:24px;min-width:22px}
+    .rec .name{font-size:15px}
+    /* tools */
+    .toolpick{gap:6px}
+    .toolpick button{padding:8px 12px;font-size:13px}
+    .toolhead h3{font-size:23px}
+    .panel{padding:14px}
+    table.grid{min-width:520px}
+    .eisen{grid-template-columns:1fr}
+    /* about */
+    .about-card{padding:18px 16px}
+    .about-card p{font-size:14.5px}
+  }
+  @media(max-width:380px){
+    .tab .num{display:none}
+    h1.title{font-size:44px}
+  }
 </style>
 </head>
 <body>
@@ -277,16 +327,18 @@
   <div class="wrap">
     <div class="brandrow">
       <div>
-        <div class="eyebrow">Cedric&rsquo;s field guide to deciding well</div>
+        <div class="eyebrow">A field guide to deciding well</div>
         <h1 class="title">Cedric&rsquo;s Decision <em>Atlas</em></h1>
         <p class="tagline"><span id="fwcount">Twenty-three</span> frameworks for thinking clearly under uncertainty — matched to your situation, explained in plain terms, and built into tools you can actually use.</p>
       </div>
     </div>
-    <div class="legend" aria-hidden="true">
-      <span><i class="dot" style="background:var(--biz)"></i>Business / strategy</span>
-      <span><i class="dot" style="background:var(--personal)"></i>Personal</span>
-      <span><i class="dot" style="background:var(--product)"></i>Product / eng</span>
-      <span><i class="dot" style="background:var(--team)"></i>Team / management</span>
+    <div class="legend" id="legend">
+      <button class="legend-item" data-dom="business" title="Show business / strategy frameworks"><i class="dot" style="background:var(--biz)"></i>Business / strategy</button>
+      <button class="legend-item" data-dom="personal" title="Show personal frameworks"><i class="dot" style="background:var(--personal)"></i>Personal</button>
+      <button class="legend-item" data-dom="family" title="Show family frameworks"><i class="dot" style="background:var(--family)"></i>Family</button>
+      <button class="legend-item" data-dom="product" title="Show product / eng frameworks"><i class="dot" style="background:var(--product)"></i>Product / eng</button>
+      <button class="legend-item" data-dom="team" title="Show team / management frameworks"><i class="dot" style="background:var(--team)"></i>Team / management</button>
+      <span class="legend-hint">· tap to filter</span>
     </div>
   </div>
 </header>
@@ -306,7 +358,8 @@
     <div class="wrap">
       <p class="sectlabel">Mode 01 — Match</p>
       <h2 class="h">What kind of decision are you facing?</h2>
-      <p class="lede">Answer up to four questions. The map plots frameworks by how <b>reversible</b> the decision is and how <b>knowable</b> the situation is — the two factors that most determine which tool fits. Your answers light up the right region and rank the best matches.</p>
+      <p class="lede">Optionally focus on one kind of decision, then answer up to four questions. The map plots frameworks by how <b>reversible</b> the decision is and how <b>knowable</b> the situation is — the two factors that most determine which tool fits. Your answers light up the right region and rank the best matches.</p>
+      <div class="filterrow matchfocus" id="matchFocus"></div>
       <div class="match-grid">
         <div>
           <div class="qcard" id="quiz"></div>
@@ -316,7 +369,7 @@
           <div class="mapcard">
             <div class="map-cap">
               <p class="sectlabel" style="margin:0">The decision map</p>
-              <span class="maphint">hover a point</span>
+              <span class="maphint">tap a point</span>
             </div>
             <svg class="mapsvg" id="map" viewBox="0 0 440 360" role="img" aria-label="Map of frameworks by reversibility and uncertainty"></svg>
           </div>
@@ -469,6 +522,7 @@
         <h3>Good to know</h3>
         <p><b>No tracking, no backend.</b> Nothing you type is stored or sent anywhere — everything runs in your browser. The only external resource loaded is Google Fonts.</p>
         <p><b>Not advice.</b> The Atlas is a thinking aid, not financial, legal, or medical advice. The call is always yours.</p>
+        <p><b>Personal project.</b> This Atlas was developed for Cedric's own personal use and is shared as-is, with no warranties of any kind. Anyone else who uses it does so entirely at their own risk. Cedric accepts no responsibility or liability for any decisions made or outcomes arising from its use.</p>
       </div>
     </div>
   </section>
@@ -482,7 +536,7 @@
 
 <script>
 /* ========================================================= DATA */
-const D={business:"Business / strategy",personal:"Personal",product:"Product / eng",team:"Team / management"};
+const D={business:"Business / strategy",personal:"Personal",family:"Family",product:"Product / eng",team:"Team / management"};
 // fit keys — rev: reversible|costly|permanent · clarity: clear|complicated|complex|crisis
 //            who: solo|group · shape: compare|prioritize|values|risks
 const FW=[
@@ -717,11 +771,19 @@ const FW=[
   watch:"Easy to bias by padding one column — the cancellation step, not the listing, is where the honesty lives."}
 ];
 
+/* Family as a decision context: tag the frameworks that genuinely help with household
+   and family decisions, and mark which ones work when a family decides together. */
+const FAMILY_FW=['matrix','eisenhower','doors','regret','101010','wrap','premortem','hats','cba','ev','inversion','secondorder','satisfice','proscons'];
+FAMILY_FW.forEach(id=>{const f=FW.find(x=>x.id===id);if(f){
+  if(!f.doms.includes('family'))f.doms.push('family');
+  if(f.fit&&f.fit.who&&!f.fit.who.includes('family'))f.fit.who.push('family');
+}});
+
 /* ========================================================= UTIL */
 const $=(s,r=document)=>r.querySelector(s);
 const $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const domClass=d=>d; // business/personal/product/team
-function domTag(d){return `<span class="tag-dom ${d}">${({business:'Biz',personal:'Personal',product:'Product',team:'Team'})[d]}</span>`}
+function domTag(d){return `<span class="tag-dom ${d}">${({business:'Biz',personal:'Personal',family:'Family',product:'Product',team:'Team'})[d]}</span>`}
 
 /* ========================================================= TABS */
 $$('.tab').forEach(t=>t.addEventListener('click',()=>{
@@ -729,6 +791,7 @@ $$('.tab').forEach(t=>t.addEventListener('click',()=>{
   t.setAttribute('aria-selected','true');
   $$('.view').forEach(v=>v.classList.remove('active'));
   $('#view-'+t.dataset.view).classList.add('active');
+  try{t.scrollIntoView({inline:'center',block:'nearest'});}catch(e){}
   window.scrollTo({top:0,behavior:'smooth'});
 }));
 
@@ -736,10 +799,20 @@ $$('.tab').forEach(t=>t.addEventListener('click',()=>{
 const QUESTIONS=[
  {key:'rev',q:'How reversible is it?',opts:[['reversible','Easily undone','two-way door'],['costly','Costly to undo','some lock-in'],['permanent','Effectively permanent','one-way door']]},
  {key:'clarity',q:'How knowable is the situation?',opts:[['clear','Clear & familiar','known cause→effect'],['complicated','Complicated','expertise can solve it'],['complex','Genuinely uncertain','novel, emergent'],['crisis','Crisis — act now','no time to analyze']]},
- {key:'who',q:'Who decides?',opts:[['solo','Just me','solo call'],['group','A group / team','needs alignment']]},
+ {key:'who',q:'Who decides?',opts:[['solo','Just me','solo call'],['group','A group / team','needs alignment'],['family','My family','household call']]},
  {key:'shape',q:'What shape is the decision?',opts:[['compare','Comparing options','a few concrete choices'],['prioritize','Prioritizing a list','sequencing many items'],['values','A big values call','life / direction'],['risks','Surfacing risks','before committing']]}
 ];
 const answers={};
+let matchDomain=null; // null = all domains
+function renderMatchFocus(){
+  const el=$('#matchFocus'); if(!el)return;
+  el.innerHTML='<span class="frow-label">Focus</span>'+
+    `<button class="fchip all" aria-pressed="${matchDomain===null}" data-dom="">All decisions</button>`+
+    DOMS.map(d=>`<button class="fchip dom-${d}" aria-pressed="${matchDomain===d}" data-dom="${d}">${D[d]}</button>`).join('');
+  $$('#matchFocus .fchip').forEach(b=>b.addEventListener('click',()=>{
+    matchDomain=b.dataset.dom||null; renderMatchFocus(); update();
+  }));
+}
 function renderQuiz(){
   $('#quiz').innerHTML=QUESTIONS.map((Q,i)=>`
     <div class="qblock">
@@ -770,7 +843,7 @@ function scoreFW(f){
 const reasonText={
   rev:{reversible:'fits reversible calls',costly:'handles real lock-in',permanent:'built for irreversible stakes'},
   clarity:{clear:'suits clear situations',complicated:'good for knowable complexity',complex:'works under true uncertainty',crisis:'designed for fast crises'},
-  who:{solo:'works solo',group:'made for groups'},
+  who:{solo:'works solo',group:'made for groups',family:'works for family decisions'},
   shape:{compare:'compares options',prioritize:'prioritizes a list',values:'handles values calls',risks:'surfaces risks'}
 };
 
@@ -791,13 +864,15 @@ function renderMap(){
     <text class="quad-label" x="${MAP.x0+6}" y="${MAP.y0+MAP.h-8}">act fast</text>
     <text class="quad-label" x="${MAP.x0+MAP.w-6}" y="${MAP.y0+MAP.h-8}" text-anchor="end">analyze / compare</text>`;
   const anyAns=Object.keys(answers).some(k=>answers[k]);
-  const nodes=FW.filter(f=>f.map).map(f=>{
+  const mapPool=FW.filter(f=>f.map && (!matchDomain || f.doms.includes(matchDomain)));
+  const nodes=mapPool.map(f=>{
     const {s}=scoreFW(f);
     const hot = anyAns && s>=2;
     const dim = anyAns && s<2;
     const c=primaryDomColor(f);
     return `<g class="node ${hot?'hot':''} ${dim?'dim':''}" data-id="${f.id}" tabindex="0" role="button" aria-label="${f.name}">
-      <circle cx="${mapX(f.map[0]).toFixed(1)}" cy="${mapY(f.map[1]).toFixed(1)}" r="${hot?8:6}" fill="${c}" fill-opacity=".85" stroke="${c}"/>
+      <circle class="hit" cx="${mapX(f.map[0]).toFixed(1)}" cy="${mapY(f.map[1]).toFixed(1)}" r="16" fill="transparent"/>
+      <circle class="pt" cx="${mapX(f.map[0]).toFixed(1)}" cy="${mapY(f.map[1]).toFixed(1)}" r="${hot?8:6}" fill="${c}" fill-opacity=".85" stroke="${c}"/>
       <text x="${mapX(f.map[0]).toFixed(1)}" y="${(mapY(f.map[1])-11).toFixed(1)}" text-anchor="middle">${f.name.split(' ').slice(0,2).join(' ')}</text>
     </g>`;
   }).join('');
@@ -808,32 +883,53 @@ function renderMap(){
     n.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});
   });
 }
-function primaryDomColor(f){const m={business:'var(--biz)',personal:'var(--personal)',product:'var(--product)',team:'var(--team)'};return m[f.doms[0]];}
+function primaryDomColor(f){const m={business:'var(--biz)',personal:'var(--personal)',family:'var(--family)',product:'var(--product)',team:'var(--team)'};return m[f.doms[0]];}
 
 /* recommendations */
+function domChipLabel(f){return ({business:'biz',personal:'personal',family:'family',product:'product',team:'team'})[f.doms[0]];}
+function recCard(f,leftLabel,whyHtml){
+  const c=primaryDomColor(f);
+  return `<button class="rec" style="border-left-color:${c}" data-id="${f.id}">
+    <span class="rank">${leftLabel}</span>
+    <span class="body">
+      <span class="name">${f.name}<span class="chip" style="color:${c}">${domChipLabel(f)}</span></span>
+      <span class="why">${whyHtml}</span>
+    </span></button>`;
+}
 function renderRecs(){
   const anyAns=Object.keys(answers).some(k=>answers[k]);
   const box=$('#recs');
-  if(!anyAns){box.innerHTML=`<div class="empty-rec">Answer a question above to see matched frameworks ranked here.</div>`;return;}
-  const ranked=FW.map(f=>({f,...scoreFW(f)})).filter(r=>r.s>0).sort((a,b)=>b.s-a.s||fwBreadth(a.f)-fwBreadth(b.f)||a.f.name.localeCompare(b.f.name)).slice(0,5);
-  if(!ranked.length){box.innerHTML=`<div class="empty-rec">No strong match yet — try adjusting your answers.</div>`;return;}
-  box.innerHTML=`<p class="sectlabel">Recommended for you</p>`+ranked.map((r,i)=>{
-    const c=primaryDomColor(r.f);
-    const why=r.reasons.map(k=>reasonText[k][answers[k]]).filter(Boolean);
-    const whyStr=why.length?why.join(' · '):'broad fit';
-    return `<button class="rec" style="border-left-color:${c}" data-id="${r.f.id}">
-      <span class="rank">${i+1}</span>
-      <span class="body">
-        <span class="name">${r.f.name}<span class="chip" style="color:${c}">${({business:'biz',personal:'personal',product:'product',team:'team'})[r.f.doms[0]]}</span></span>
-        <span class="why"><b>Why:</b> ${whyStr}.</span>
-      </span></button>`;
-  }).join('');
+  const pool=matchDomain?FW.filter(f=>f.doms.includes(matchDomain)):FW;
+  const focusName=matchDomain?D[matchDomain]:null;
+  if(!anyAns){
+    if(matchDomain){
+      // browse the focused domain before any questions are answered
+      const list=[...pool].sort((a,b)=>a.name.localeCompare(b.name));
+      box.innerHTML=`<p class="sectlabel">${focusName} frameworks · ${list.length} — answer the questions to rank them</p>`+
+        list.map(f=>recCard(f,'·',f.best)).join('');
+    } else {
+      box.innerHTML=`<div class="empty-rec">Pick a focus above, or answer a question, to see frameworks here.</div>`;
+    }
+  } else {
+    const ranked=pool.map(f=>({f,...scoreFW(f)})).filter(r=>r.s>0)
+      .sort((a,b)=>b.s-a.s||fwBreadth(a.f)-fwBreadth(b.f)||a.f.name.localeCompare(b.f.name))
+      .slice(0, matchDomain?8:5);
+    if(!ranked.length){
+      box.innerHTML=`<div class="empty-rec">No strong match${focusName?` in ${focusName}`:''} yet — try adjusting your answers${focusName?' or switching focus to All decisions':''}.</div>`;
+      return;
+    }
+    box.innerHTML=`<p class="sectlabel">Recommended${focusName?` · ${focusName}`:' for you'}</p>`+ranked.map((r,i)=>{
+      const why=r.reasons.map(k=>reasonText[k][answers[k]]).filter(Boolean);
+      const whyStr=why.length?why.join(' · '):'broad fit';
+      return recCard(r.f,i+1,`<b>Why:</b> ${whyStr}.`);
+    }).join('');
+  }
   $$('#recs .rec').forEach(b=>b.addEventListener('click',()=>openDrawer(b.dataset.id)));
 }
 function update(){renderMap();renderRecs();}
 
 /* ========================================================= LIBRARY */
-const DOMS=['business','personal','product','team'];
+const DOMS=['business','personal','family','product','team'];
 const ATTRS=['Quantitative','Qualitative','Fast','Prioritization','Risk','Group','Solo or group','Values','Mental model','Diagnostic'];
 const fstate={doms:new Set(),attrs:new Set(),q:''};
 function renderFilterChips(){
@@ -869,6 +965,16 @@ function renderCards(){
     </button>`;
   }).join('');
   $$('#cards .card').forEach(b=>b.addEventListener('click',()=>openDrawer(b.dataset.id)));
+}
+/* clickable header legend → jump to Library filtered to one domain */
+function openLibraryDomain(dom){
+  $$('.tab').forEach(x=>x.setAttribute('aria-selected',String(x.dataset.view==='library')));
+  $$('.view').forEach(v=>v.classList.toggle('active',v.id==='view-library'));
+  fstate.doms=new Set([dom]); fstate.attrs.clear(); fstate.q=''; const sb=$('#search'); if(sb)sb.value='';
+  $$('#domFilters .fchip').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.dom===dom)));
+  $$('#attrFilters .fchip').forEach(b=>b.setAttribute('aria-pressed','false'));
+  renderCards();
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 /* ========================================================= DRAWER */
@@ -1035,7 +1141,8 @@ $('#footnote').textContent="Cedric's Decision Atlas — "+FW.length+' frameworks
 
 /* ========================================================= INIT */
 $('#fwcount').textContent=FW.length;
-renderQuiz();update();renderFilterChips();renderCards();renderMatrix();renderRice();renderEisen();renderReasons();
+$$('#legend .legend-item').forEach(b=>b.addEventListener('click',()=>openLibraryDomain(b.dataset.dom)));
+renderMatchFocus();renderQuiz();update();renderFilterChips();renderCards();renderMatrix();renderRice();renderEisen();renderReasons();
 </script>
 </body>
 </html>
