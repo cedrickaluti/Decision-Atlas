@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cedric's Decision Atlas — a field guide to deciding well</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#ECEAE3;
+    --paper-2:#E4E1D8;
+    --panel:#F4F2EC;
+    --ink:#241F2B;
+    --ink-soft:#5B5564;
+    --ink-faint:#8A8492;
+    --line:#CFCABF;
+    --line-soft:#DDD9CF;
+    --gold:#A8762A;
+    --biz:#2E6E6A;     /* business / strategy */
+    --personal:#B05E3A;/* personal */
+    --product:#47509B; /* product / eng */
+    --team:#6B7836;    /* team / management */
+    --radius:14px;
+    --shadow:0 1px 0 rgba(36,31,43,.04), 0 8px 30px -18px rgba(36,31,43,.28);
+    --maxw:1160px;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Hanken Grotesk",system-ui,sans-serif;
+    font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(circle at 1px 1px, rgba(36,31,43,.035) 1px, transparent 0);
+    background-size:22px 22px;
+  }
+  .mono{font-family:"IBM Plex Mono",monospace}
+  .serif{font-family:"Instrument Serif",Georgia,serif;font-weight:400}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  a{color:inherit}
+  button{font-family:inherit;cursor:pointer}
+  :focus-visible{outline:2.5px solid var(--gold);outline-offset:2px;border-radius:4px}
+
+  /* ---------- header ---------- */
+  header.site{padding:28px 0 10px}
+  .brandrow{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--ink-soft)}
+  h1.title{font-family:"Instrument Serif",serif;font-weight:400;
+    font-size:clamp(40px,7vw,76px);line-height:.96;letter-spacing:-.01em;margin:.1em 0 .15em}
+  h1.title em{font-style:italic;color:var(--gold)}
+  .tagline{max-width:46ch;color:var(--ink-soft);font-size:16.5px;margin:0}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px}
+  .legend span{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft);
+    font-family:"IBM Plex Mono",monospace;letter-spacing:.02em}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+
+  /* ---------- mode tabs ---------- */
+  nav.modes{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--paper) 88%, transparent);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line);margin-top:22px}
+  .modes-inner{display:flex;gap:4px;max-width:var(--maxw);margin:0 auto;padding:8px 22px}
+  .tab{appearance:none;background:transparent;border:1px solid transparent;color:var(--ink-soft);
+    padding:9px 16px;border-radius:999px;font-weight:600;font-size:14.5px;letter-spacing:.01em;
+    display:inline-flex;align-items:center;gap:9px;transition:background .18s,color .18s,border-color .18s}
+  .tab .num{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-faint)}
+  .tab:hover{color:var(--ink);background:var(--paper-2)}
+  .tab[aria-selected="true"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  .tab[aria-selected="true"] .num{color:color-mix(in srgb,var(--panel) 65%,transparent)}
+
+  main{padding:30px 0 90px}
+  .view{display:none;animation:fade .35s ease both}
+  .view.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .sectlabel{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--ink-faint);margin:0 0 4px}
+  h2.h{font-family:"Instrument Serif",serif;font-weight:400;font-size:clamp(26px,3.4vw,38px);
+    line-height:1.04;margin:0 0 6px;letter-spacing:-.01em}
+  .lede{color:var(--ink-soft);max-width:62ch;margin:0 0 22px}
+
+  /* ---------- MATCH view ---------- */
+  .match-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:26px;align-items:start}
+  @media(max-width:900px){.match-grid{grid-template-columns:1fr}}
+  .qcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px 20px 8px;box-shadow:var(--shadow)}
+  .qblock{padding:6px 0 16px;border-bottom:1px dashed var(--line-soft)}
+  .qblock:last-child{border-bottom:0}
+  .qhead{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+  .qnum{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--gold);font-weight:600}
+  .qtext{font-weight:700;font-size:15.5px}
+  .opts{display:flex;flex-wrap:wrap;gap:8px}
+  .opt{appearance:none;border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);
+    padding:8px 13px;border-radius:9px;font-size:13.5px;font-weight:600;
+    transition:all .16s;line-height:1.2}
+  .opt small{display:block;font-weight:500;font-size:11px;color:var(--ink-faint);margin-top:2px}
+  .opt:hover{border-color:var(--ink-soft);color:var(--ink)}
+  .opt[aria-pressed="true"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  .opt[aria-pressed="true"] small{color:color-mix(in srgb,var(--panel) 70%,transparent)}
+  .resetrow{display:flex;justify-content:flex-end;padding:10px 0 6px}
+  .linkbtn{background:none;border:0;color:var(--ink-faint);font-size:12.5px;
+    font-family:"IBM Plex Mono",monospace;letter-spacing:.04em;text-decoration:underline;text-underline-offset:3px}
+  .linkbtn:hover{color:var(--ink)}
+
+  /* map */
+  .mapcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px;box-shadow:var(--shadow);position:sticky;top:64px}
+  @media(max-width:900px){.mapcard{position:static}}
+  .map-cap{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;gap:10px}
+  .maphint{font-size:12px;color:var(--ink-faint);font-family:"IBM Plex Mono",monospace}
+  .mapsvg{width:100%;height:auto;display:block;touch-action:manipulation}
+  .axis-label{font-family:"IBM Plex Mono",monospace;font-size:10.5px;fill:var(--ink-faint);letter-spacing:.08em;text-transform:uppercase}
+  .quad-label{font-family:"IBM Plex Mono",monospace;font-size:10px;fill:var(--ink-faint);letter-spacing:.05em}
+  .node circle{cursor:pointer;transition:r .2s, opacity .25s, stroke-width .2s}
+  .node text{font-size:10.5px;fill:var(--ink-soft);font-weight:600;pointer-events:none;opacity:0;transition:opacity .2s}
+  .node.hot circle{stroke:var(--ink);stroke-width:2}
+  .node.hot text{opacity:1}
+  .node.dim circle{opacity:.22}
+  .node:hover text{opacity:1}
+
+  /* recommendations */
+  .recs{margin-top:22px}
+  .rec{display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);
+    border-left-width:4px;border-radius:12px;padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow);
+    text-align:left;width:100%;transition:transform .15s, box-shadow .15s}
+  .rec:hover{transform:translateY(-1px);box-shadow:0 12px 30px -18px rgba(36,31,43,.4)}
+  .rec .rank{font-family:"Instrument Serif",serif;font-size:30px;line-height:1;color:var(--ink-faint);min-width:30px}
+  .rec .body{flex:1;min-width:0}
+  .rec .name{font-weight:700;font-size:16px;margin:0 0 2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .rec .why{font-size:13px;color:var(--ink-soft);margin:0}
+  .rec .why b{color:var(--ink);font-weight:600}
+  .chip{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.04em;text-transform:uppercase;
+    padding:2px 7px;border-radius:999px;border:1px solid currentColor;line-height:1.5;white-space:nowrap}
+  .empty-rec{color:var(--ink-faint);font-size:14px;padding:18px;text-align:center;border:1px dashed var(--line);border-radius:12px}
+
+  /* ---------- LIBRARY view ---------- */
+  .filters{display:flex;flex-direction:column;gap:12px;margin-bottom:22px}
+  .filterrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .frow-label{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-faint);margin-right:2px}
+  .fchip{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--ink-soft);
+    padding:6px 12px;border-radius:999px;font-size:13px;font-weight:600;transition:all .15s}
+  .fchip:hover{border-color:var(--ink-soft);color:var(--ink)}
+  .fchip[aria-pressed="true"]{color:var(--panel);border-color:transparent}
+  .fchip.dom-business[aria-pressed="true"]{background:var(--biz)}
+  .fchip.dom-personal[aria-pressed="true"]{background:var(--personal)}
+  .fchip.dom-product[aria-pressed="true"]{background:var(--product)}
+  .fchip.dom-team[aria-pressed="true"]{background:var(--team)}
+  .fchip.attr[aria-pressed="true"]{background:var(--ink)}
+  .search{flex:1;min-width:180px;border:1px solid var(--line);background:var(--panel);border-radius:999px;
+    padding:8px 16px;font-size:14px;font-family:inherit;color:var(--ink)}
+  .search::placeholder{color:var(--ink-faint)}
+  .count{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-faint)}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:17px 17px 15px;
+    text-align:left;display:flex;flex-direction:column;gap:9px;box-shadow:var(--shadow);
+    transition:transform .15s, box-shadow .15s, border-color .15s;position:relative;overflow:hidden}
+  .card:hover{transform:translateY(-3px);box-shadow:0 16px 34px -20px rgba(36,31,43,.45)}
+  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent,var(--line))}
+  .card .ctop{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .card .cname{font-weight:700;font-size:16.5px;line-height:1.15;padding-left:8px}
+  .card .corigin{font-size:11.5px;color:var(--ink-faint);font-family:"IBM Plex Mono",monospace;padding-left:8px}
+  .card .cdesc{font-size:13.5px;color:var(--ink-soft);padding-left:8px;flex:1}
+  .card .ctags{display:flex;gap:6px;flex-wrap:wrap;padding-left:8px}
+  .tag-dom{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.03em;text-transform:uppercase;
+    padding:2px 7px;border-radius:5px;color:#fff}
+  .tag-dom.business{background:var(--biz)}.tag-dom.personal{background:var(--personal)}
+  .tag-dom.product{background:var(--product)}.tag-dom.team{background:var(--team)}
+  .tag-attr{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.03em;
+    padding:2px 7px;border-radius:5px;border:1px solid var(--line);color:var(--ink-soft)}
+  .noresults{grid-column:1/-1;text-align:center;color:var(--ink-faint);padding:40px;border:1px dashed var(--line);border-radius:12px}
+
+  /* ---------- drawer ---------- */
+  .scrim{position:fixed;inset:0;background:rgba(36,31,43,.42);opacity:0;pointer-events:none;
+    transition:opacity .25s;z-index:60;backdrop-filter:blur(2px)}
+  .scrim.open{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;height:100%;width:min(520px,94vw);background:var(--panel);
+    border-left:1px solid var(--line);transform:translateX(102%);transition:transform .3s cubic-bezier(.4,0,.2,1);
+    z-index:70;overflow-y:auto;box-shadow:-20px 0 50px -30px rgba(36,31,43,.6)}
+  .drawer.open{transform:none}
+  @media(prefers-reduced-motion:reduce){.drawer{transition:none}.scrim{transition:none}.view{animation:none}}
+  .dr-inner{padding:24px 26px 60px}
+  .dr-close{position:sticky;top:0;float:right;margin:-6px -6px 0 0;background:var(--paper-2);border:1px solid var(--line);
+    width:34px;height:34px;border-radius:50%;font-size:17px;color:var(--ink-soft);line-height:1;z-index:2}
+  .dr-close:hover{color:var(--ink);background:var(--paper)}
+  .dr-origin{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+  .dr-name{font-family:"Instrument Serif",serif;font-size:38px;line-height:1.02;margin:4px 0 8px;letter-spacing:-.01em}
+  .dr-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+  .dr-sect{margin:18px 0}
+  .dr-sect h4{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--ink-faint);margin:0 0 8px;display:flex;align-items:center;gap:8px}
+  .dr-sect h4::after{content:"";flex:1;height:1px;background:var(--line-soft)}
+  .dr-sect p{margin:0 0 8px;font-size:14.5px}
+  ol.steps{margin:0;padding:0;counter-reset:s;list-style:none}
+  ol.steps li{counter-increment:s;position:relative;padding:7px 0 7px 38px;border-bottom:1px dashed var(--line-soft);font-size:14px}
+  ol.steps li:last-child{border-bottom:0}
+  ol.steps li::before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:7px;
+    font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--gold);font-weight:600}
+  .example{background:var(--paper);border:1px solid var(--line-soft);border-radius:10px;padding:12px 14px;font-size:14px}
+  .watch{background:#F6EEDC;border:1px solid #E6D6AE;border-radius:10px;padding:12px 14px;font-size:14px;color:#6b5417}
+
+  /* ---------- TOOLS view ---------- */
+  .toolpick{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+  .toolpick button{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--ink-soft);
+    padding:9px 15px;border-radius:10px;font-weight:600;font-size:14px;transition:all .15s;display:flex;gap:9px;align-items:center}
+  .toolpick button .tnum{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--gold)}
+  .toolpick button:hover{border-color:var(--ink-soft);color:var(--ink)}
+  .toolpick button[aria-selected="true"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  .toolpick button[aria-selected="true"] .tnum{color:var(--gold)}
+  .toolpane{display:none}.toolpane.active{display:block}
+  .toolhead{margin-bottom:14px}
+  .toolhead h3{font-family:"Instrument Serif",serif;font-weight:400;font-size:28px;margin:0 0 2px}
+  .toolhead p{margin:0;color:var(--ink-soft);font-size:14px;max-width:60ch}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);overflow-x:auto}
+  table.grid{border-collapse:collapse;width:100%;font-size:14px;min-width:480px}
+  table.grid th,table.grid td{border:1px solid var(--line-soft);padding:7px 9px;text-align:center}
+  table.grid th{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);background:var(--paper-2);font-weight:600}
+  table.grid td.opt-name{text-align:left;font-weight:600}
+  table.grid input,table.grid .winscore{width:62px;text-align:center;border:1px solid var(--line);border-radius:7px;
+    padding:5px;font-family:"IBM Plex Mono",monospace;font-size:13px;background:var(--paper);color:var(--ink)}
+  table.grid input.namein{width:100%;text-align:left;font-family:inherit;font-weight:600}
+  table.grid input.wt{width:48px}
+  .total{font-family:"IBM Plex Mono",monospace;font-weight:600}
+  tr.winner td{background:#F6EEDC}
+  tr.winner .total{color:var(--gold)}
+  .minibtn{appearance:none;border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);
+    border-radius:8px;padding:6px 12px;font-size:13px;font-weight:600;transition:all .15s}
+  .minibtn:hover{border-color:var(--ink-soft);color:var(--ink)}
+  .miniicon{appearance:none;border:0;background:none;color:var(--ink-faint);font-size:16px;line-height:1;padding:2px 6px;border-radius:6px}
+  .miniicon:hover{color:var(--personal);background:var(--paper)}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;align-items:center}
+  .field{display:flex;flex-direction:column;gap:4px}
+  .field label{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint)}
+  textarea,.tin{border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-family:inherit;font-size:14px;background:var(--paper);color:var(--ink);width:100%;resize:vertical}
+  /* eisenhower */
+  .eisen{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:560px){.eisen{grid-template-columns:1fr}}
+  .quad{border:1px solid var(--line);border-radius:12px;padding:14px;min-height:130px;background:var(--paper)}
+  .quad h5{margin:0 0 4px;font-size:14px;font-weight:700}
+  .quad .qd{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:8px}
+  .quad.q1{border-top:4px solid var(--personal)} .quad.q2{border-top:4px solid var(--biz)}
+  .quad.q3{border-top:4px solid var(--gold)} .quad.q4{border-top:4px solid var(--ink-faint)}
+  .task{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--panel);
+    border:1px solid var(--line-soft);border-radius:8px;padding:6px 10px;margin-bottom:6px;font-size:13.5px}
+  .task .move{display:flex;gap:3px}
+  .task .move button{border:0;background:var(--paper-2);border-radius:5px;font-size:10px;padding:2px 6px;color:var(--ink-soft);font-family:"IBM Plex Mono",monospace}
+  .task .move button:hover{background:var(--ink);color:var(--panel)}
+  /* premortem / reflection */
+  .worksheet .field{margin-bottom:14px}
+  .reasons li{margin-bottom:8px}
+  .copied{color:var(--biz);font-size:12.5px;font-family:"IBM Plex Mono",monospace;margin-left:6px}
+
+  footer{border-top:1px solid var(--line);margin-top:50px;padding:24px 0 60px}
+  footer p{font-size:12.5px;color:var(--ink-faint);font-family:"IBM Plex Mono",monospace;letter-spacing:.02em;margin:0;max-width:80ch}
+  .skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:var(--ink);color:#fff;padding:8px 12px;border-radius:8px;z-index:99}
+</style>
+</head>
+<body>
+<a href="#main" class="skip">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <div class="brandrow">
+      <div>
+        <div class="eyebrow">Cedric&rsquo;s field guide to deciding well</div>
+        <h1 class="title">Cedric&rsquo;s Decision <em>Atlas</em></h1>
+        <p class="tagline"><span id="fwcount">Twenty-three</span> frameworks for thinking clearly under uncertainty — matched to your situation, explained in plain terms, and built into tools you can actually use.</p>
+      </div>
+    </div>
+    <div class="legend" aria-hidden="true">
+      <span><i class="dot" style="background:var(--biz)"></i>Business / strategy</span>
+      <span><i class="dot" style="background:var(--personal)"></i>Personal</span>
+      <span><i class="dot" style="background:var(--product)"></i>Product / eng</span>
+      <span><i class="dot" style="background:var(--team)"></i>Team / management</span>
+    </div>
+  </div>
+</header>
+
+<nav class="modes" aria-label="Modes">
+  <div class="modes-inner" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-view="match"><span class="num">01</span>Match</button>
+    <button class="tab" role="tab" aria-selected="false" data-view="library"><span class="num">02</span>Library</button>
+    <button class="tab" role="tab" aria-selected="false" data-view="tools"><span class="num">03</span>Tools</button>
+  </div>
+</nav>
+
+<main id="main">
+  <!-- ============ MATCH ============ -->
+  <section class="view active" id="view-match">
+    <div class="wrap">
+      <p class="sectlabel">Mode 01 — Match</p>
+      <h2 class="h">What kind of decision are you facing?</h2>
+      <p class="lede">Answer up to four questions. The map plots frameworks by how <b>reversible</b> the decision is and how <b>knowable</b> the situation is — the two factors that most determine which tool fits. Your answers light up the right region and rank the best matches.</p>
+      <div class="match-grid">
+        <div>
+          <div class="qcard" id="quiz"></div>
+          <div class="resetrow"><button class="linkbtn" id="resetQuiz">reset answers</button></div>
+        </div>
+        <div>
+          <div class="mapcard">
+            <div class="map-cap">
+              <p class="sectlabel" style="margin:0">The decision map</p>
+              <span class="maphint">hover a point</span>
+            </div>
+            <svg class="mapsvg" id="map" viewBox="0 0 440 360" role="img" aria-label="Map of frameworks by reversibility and uncertainty"></svg>
+          </div>
+        </div>
+      </div>
+      <div class="recs" id="recs"></div>
+    </div>
+  </section>
+
+  <!-- ============ LIBRARY ============ -->
+  <section class="view" id="view-library">
+    <div class="wrap">
+      <p class="sectlabel">Mode 02 — Library</p>
+      <h2 class="h">The full collection</h2>
+      <p class="lede">Filter by domain or by the shape of the decision, or search. Tap any framework for how to run it, a worked example, and what to watch out for.</p>
+      <div class="filters">
+        <div class="filterrow" id="domFilters"><span class="frow-label">Domain</span></div>
+        <div class="filterrow" id="attrFilters"><span class="frow-label">Traits</span></div>
+        <div class="filterrow">
+          <input class="search" id="search" type="search" placeholder="Search frameworks, e.g. reversible, group, prioritize…" aria-label="Search frameworks" />
+          <span class="count" id="count"></span>
+        </div>
+      </div>
+      <div class="cards" id="cards"></div>
+    </div>
+  </section>
+
+  <!-- ============ TOOLS ============ -->
+  <section class="view" id="view-tools">
+    <div class="wrap">
+      <p class="sectlabel">Mode 03 — Tools</p>
+      <h2 class="h">Run a framework now</h2>
+      <p class="lede">Four working templates. Nothing is saved to a server — use <b>Copy</b> to keep your results.</p>
+      <div class="toolpick" role="tablist" id="toolpick">
+        <button role="tab" aria-selected="true" data-tool="matrix"><span class="tnum">A</span>Weighted matrix</button>
+        <button role="tab" aria-selected="false" data-tool="rice"><span class="tnum">B</span>RICE scoring</button>
+        <button role="tab" aria-selected="false" data-tool="eisen"><span class="tnum">C</span>Eisenhower sort</button>
+        <button role="tab" aria-selected="false" data-tool="premortem"><span class="tnum">D</span>Pre-mortem</button>
+      </div>
+
+      <!-- A: weighted matrix -->
+      <div class="toolpane active" id="tool-matrix">
+        <div class="toolhead"><h3>Weighted decision matrix</h3><p>Compare a few concrete options against criteria that matter to different degrees. Set a weight per criterion, score each option 1–5, and the weighted totals do the rest.</p></div>
+        <div class="panel"><table class="grid" id="matrixTable"></table>
+          <div class="toolbar">
+            <button class="minibtn" id="addOption">+ Option</button>
+            <button class="minibtn" id="addCriterion">+ Criterion</button>
+            <button class="minibtn" id="copyMatrix">Copy result</button>
+            <span class="copied" id="matrixCopied"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- B: RICE -->
+      <div class="toolpane" id="tool-rice">
+        <div class="toolhead"><h3>RICE scoring</h3><p>Prioritize initiatives by <b>Reach</b> × <b>Impact</b> × <b>Confidence</b> ÷ <b>Effort</b>. Higher score = better bang for the buck. Rows re-rank as you type.</p></div>
+        <div class="panel"><table class="grid" id="riceTable"></table>
+          <div class="toolbar">
+            <button class="minibtn" id="addRice">+ Initiative</button>
+            <button class="minibtn" id="copyRice">Copy ranking</button>
+            <span class="copied" id="riceCopied"></span>
+          </div>
+          <p style="font-size:12px;color:var(--ink-faint);margin:12px 0 0;font-family:'IBM Plex Mono',monospace">
+            reach = people affected · impact 0.25–3 · confidence 0–100% · effort in person-months</p>
+        </div>
+      </div>
+
+      <!-- C: eisenhower -->
+      <div class="toolpane" id="tool-eisen">
+        <div class="toolhead"><h3>Eisenhower sort</h3><p>Triage competing demands by urgency and importance. Add items, then nudge each into a quadrant. The quadrant tells you the action.</p></div>
+        <div class="panel">
+          <div class="toolbar" style="margin:0 0 14px">
+            <input class="tin" id="eisenInput" placeholder="Add a task or demand…" style="max-width:340px" />
+            <button class="minibtn" id="addEisen">Add</button>
+          </div>
+          <div class="eisen">
+            <div class="quad q1" data-q="1"><div class="qd">Urgent · Important</div><h5>Do now</h5><div class="qlist" id="q1"></div></div>
+            <div class="quad q2" data-q="2"><div class="qd">Not urgent · Important</div><h5>Schedule</h5><div class="qlist" id="q2"></div></div>
+            <div class="quad q3" data-q="3"><div class="qd">Urgent · Not important</div><h5>Delegate</h5><div class="qlist" id="q3"></div></div>
+            <div class="quad q4" data-q="4"><div class="qd">Not urgent · Not important</div><h5>Delete</h5><div class="qlist" id="q4"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- D: premortem -->
+      <div class="toolpane" id="tool-premortem">
+        <div class="toolhead"><h3>Pre-mortem</h3><p>Before committing, imagine it's months later and the decision failed badly. Writing down <i>why</i> surfaces risks while you can still act on them.</p></div>
+        <div class="panel worksheet">
+          <div class="field"><label for="pmDecision">The decision</label><textarea id="pmDecision" rows="2" placeholder="e.g. We're going to launch in three new markets at once next quarter."></textarea></div>
+          <div class="field"><label>Imagine it failed. Why? (add the plausible reasons)</label>
+            <div class="toolbar" style="margin:6px 0 10px"><input class="tin" id="pmReasonInput" placeholder="A reason it went wrong…" style="max-width:360px"><button class="minibtn" id="addReason">Add reason</button></div>
+            <ol class="reasons steps" id="pmReasons"></ol>
+          </div>
+          <div class="toolbar"><button class="minibtn" id="copyPm">Copy worksheet</button><span class="copied" id="pmCopied"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><p id="footnote"></p></div></footer>
+
+<!-- drawer -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Framework detail" aria-hidden="true"><div class="dr-inner" id="drawerBody"></div></aside>
+
+<script>
+/* ========================================================= DATA */
+const D={business:"Business / strategy",personal:"Personal",product:"Product / eng",team:"Team / management"};
+// fit keys — rev: reversible|costly|permanent · clarity: clear|complicated|complex|crisis
+//            who: solo|group · shape: compare|prioritize|values|risks
+const FW=[
+ {id:"matrix",name:"Weighted Decision Matrix",origin:"Pugh matrix",doms:["business","product"],
+  attrs:["Quantitative","Few options","Solo or group"],
+  desc:"Score a handful of options against weighted criteria to compare them on more than gut feel.",
+  map:[0.55,0.25],
+  fit:{rev:["costly","permanent"],clarity:["clear","complicated"],who:["solo","group"],shape:["compare"]},
+  best:"You have 2–6 concrete options and several criteria that matter to different degrees.",
+  steps:["List the realistic options as rows.","List the criteria that matter as columns.","Weight each criterion by importance (e.g. 1–5).","Score every option on every criterion (1–5).","Multiply score × weight, sum each row, compare totals.","Sanity-check the winner against your gut — if it feels wrong, your weights are probably off."],
+  example:"Choosing a CRM: weight 'price', 'integrations', 'ease of use', and 'support'; score three vendors; the weighted total exposes that the cheapest option loses badly on integrations.",
+  watch:"Garbage in, garbage out — vague criteria or fudged weights produce false precision. Use it to structure thinking, not to outsource the call."},
+
+ {id:"cynefin",name:"Cynefin Framework",origin:"Dave Snowden",doms:["business","team"],
+  attrs:["Diagnostic","Qualitative"],
+  desc:"Decide what kind of problem you have first — clear, complicated, complex, or chaotic — because each demands a different response.",
+  map:[0.5,0.6],
+  fit:{rev:["reversible","costly","permanent"],clarity:["clear","complicated","complex","crisis"],who:["solo","group"],shape:["risks","compare"]},
+  best:"You're not even sure how to approach the problem, or the team keeps applying the wrong kind of solution.",
+  steps:["Place the situation in a domain.","Clear: obvious cause→effect — sense, categorize, apply best practice.","Complicated: knowable with expertise — sense, analyze, apply good practice.","Complex: cause→effect only clear in hindsight — probe with safe-to-fail experiments, then sense and respond.","Chaotic: no time to think — act to establish stability, then sense and respond.","Beware 'disorder': not knowing which domain you're in is its own trap."],
+  example:"A sudden outage is chaotic (act first, stabilize). Designing the new architecture to prevent the next one is complicated (bring in expertise). Predicting customer reaction to a redesign is complex (run small experiments).",
+  watch:"The biggest risk is treating a complex problem as if it were merely complicated — over-planning where you should be experimenting."},
+
+ {id:"ooda",name:"OODA Loop",origin:"John Boyd",doms:["business","team"],
+  attrs:["Fast","Iterative"],
+  desc:"Observe, Orient, Decide, Act — then loop. A tempo-based model for moving and adapting faster than the situation changes.",
+  map:[0.2,0.75],
+  fit:{rev:["reversible"],clarity:["complex","crisis"],who:["solo","group"],shape:["risks","compare"]},
+  best:"Fast-moving, competitive, or uncertain situations where speed of iteration beats one perfect decision.",
+  steps:["Observe: gather raw information about what's happening now.","Orient: interpret it through your context, experience, and mental models (Boyd's most important step).","Decide: choose a course of action as a hypothesis.","Act: execute, then immediately observe the result.","Loop faster than your competition or the environment can react."],
+  example:"A startup shipping weekly: each release is an Act; usage data is the next Observe; the goal is to learn and re-orient before a slower rival even finishes planning.",
+  watch:"Don't get stuck in Observe (analysis paralysis) or skip Orient (acting on data without interpreting it)."},
+
+ {id:"eisenhower",name:"Eisenhower Matrix",origin:"Urgent / Important",doms:["personal","team"],
+  attrs:["Prioritization","Visual","Fast"],
+  desc:"Sort competing demands into a 2×2 of urgent vs important to see what to do, schedule, delegate, or drop.",
+  map:[0.15,0.2],
+  fit:{rev:["reversible"],clarity:["clear"],who:["solo"],shape:["prioritize"]},
+  best:"Too many competing tasks and a creeping sense that urgency is crowding out what actually matters.",
+  steps:["List everything competing for your attention.","Rate each: urgent or not, important or not.","Urgent + important → do now.","Not urgent + important → schedule (this is the quadrant most people neglect).","Urgent + not important → delegate.","Not urgent + not important → delete."],
+  example:"A flood of emails feels urgent-and-important, but most are urgent-not-important (delegate or batch), freeing time for the not-urgent-but-important strategy work.",
+  watch:"Urgency is seductive. The quadrant that builds your future — important but not urgent — is the one that quietly gets skipped."},
+
+ {id:"rice",name:"RICE Scoring",origin:"Intercom",doms:["product"],
+  attrs:["Quantitative","Prioritization"],
+  desc:"Rank initiatives by Reach × Impact × Confidence ÷ Effort to prioritize a roadmap on evidence, not loudness.",
+  map:[0.35,0.35],
+  fit:{rev:["reversible","costly"],clarity:["clear","complicated"],who:["solo","group"],shape:["prioritize"]},
+  best:"A long backlog of features or bets and a need to sequence them defensibly.",
+  steps:["Reach: how many people/events this affects in a period.","Impact: how much it moves the needle per person (use a scale, e.g. 3 / 2 / 1 / .5 / .25).","Confidence: how sure you are, as a percentage.","Effort: total person-months of work.","Score = (Reach × Impact × Confidence) ÷ Effort. Rank by score."],
+  example:"A flashy feature scores low because its reach is tiny and effort huge; an unglamorous onboarding fix wins on reach and low effort.",
+  watch:"Confidence is where wishful thinking hides — be honest, and treat scores as a conversation starter, not a verdict."},
+
+ {id:"ice",name:"ICE Scoring",origin:"Sean Ellis",doms:["product","business"],
+  attrs:["Quantitative","Fast","Prioritization"],
+  desc:"A lighter cousin of RICE: rate Impact, Confidence, and Ease (1–10) and average them for a quick rank.",
+  map:[0.3,0.4],
+  fit:{rev:["reversible"],clarity:["clear","complicated"],who:["solo","group"],shape:["prioritize"]},
+  best:"You need to triage many ideas quickly — growth experiments, small bets — without heavy estimation.",
+  steps:["Score each idea 1–10 on Impact.","Score 1–10 on Confidence.","Score 1–10 on Ease.","Average (or sum) the three.","Rank, run the top few, repeat."],
+  example:"A growth team scores 20 experiment ideas in 15 minutes; the top five by ICE go into next sprint.",
+  watch:"It's deliberately rough. Don't agonize over a 6 vs 7 — the point is fast, good-enough sequencing."},
+
+ {id:"moscow",name:"MoSCoW",origin:"Dai Clegg",doms:["product","team"],
+  attrs:["Prioritization","Scope"],
+  desc:"Sort requirements into Must, Should, Could, and Won't-have-this-time to protect scope and set expectations.",
+  map:[0.4,0.3],
+  fit:{rev:["reversible","costly"],clarity:["clear","complicated"],who:["group"],shape:["prioritize"]},
+  best:"Negotiating scope for a release with stakeholders who think everything is essential.",
+  steps:["Must: non-negotiable; without it the release fails.","Should: important but not vital; there's a workaround.","Could: desirable, included if time allows.","Won't (this time): explicitly out of scope — and saying so is the real value.","Re-test 'Musts': if everything is a Must, nothing is."],
+  example:"For an MVP checkout: 'process payment' is a Must, 'save card for later' a Should, 'gift wrapping' a Could, 'loyalty points' a Won't.",
+  watch:"'Must' inflation kills it. Cap the Musts as a fraction of capacity or the prioritization is theater."},
+
+ {id:"kano",name:"Kano Model",origin:"Noriaki Kano",doms:["product"],
+  attrs:["Qualitative","Customer"],
+  desc:"Classify features by how they affect satisfaction: basic expectations, performance, and delighters.",
+  map:[0.45,0.45],
+  fit:{rev:["reversible","costly"],clarity:["complicated","complex"],who:["group"],shape:["prioritize"]},
+  best:"Deciding which features earn loyalty versus which are merely table stakes.",
+  steps:["Basic/Must-be: expected; absence angers, presence is unnoticed (e.g. brakes work).","Performance: more is better, satisfaction scales linearly (e.g. battery life).","Delighters: unexpected, create disproportionate joy (e.g. a thoughtful detail).","Survey users to classify each feature.","Cover all basics, compete on performance, sprinkle delighters — and remember delighters decay into expectations over time."],
+  example:"A phone with no signal (basic, failed) outrages users no matter how good the camera (performance) or the clever case (delighter) is.",
+  watch:"Delighters erode: today's surprise is tomorrow's baseline, so the model needs re-running periodically."},
+
+ {id:"wsjf",name:"Weighted Shortest Job First",origin:"SAFe / Reinertsen",doms:["product","team"],
+  attrs:["Quantitative","Sequencing"],
+  desc:"Sequence work by Cost of Delay ÷ Job Size, so the most valuable, fastest wins go first.",
+  map:[0.4,0.4],
+  fit:{rev:["reversible","costly"],clarity:["complicated"],who:["group"],shape:["prioritize"]},
+  best:"A queue of jobs competing for the same limited capacity, where timing affects value.",
+  steps:["Estimate Cost of Delay = business value + time-criticality + risk-reduction/opportunity.","Estimate Job Size (a proxy for duration/effort).","WSJF = Cost of Delay ÷ Job Size.","Do the highest WSJF first.","Use relative, not absolute, estimates to keep it fast."],
+  example:"A small compliance fix with a looming deadline (high time-criticality, small size) outranks a large feature with vague value.",
+  watch:"It optimizes economic flow, not strategy — a string of high-WSJF small wins can still miss a big bet that needed a long runway."},
+
+ {id:"doors",name:"One-Way vs Two-Way Doors",origin:"Jeff Bezos · Type 1/2",doms:["business","team","product","personal"],
+  attrs:["Diagnostic","Fast"],
+  desc:"Match your rigor to reversibility: irreversible decisions deserve deliberation; reversible ones should be made fast and delegated.",
+  map:[0.5,0.5],
+  fit:{rev:["reversible","costly","permanent"],clarity:["clear","complicated","complex"],who:["solo","group"],shape:["risks","compare"]},
+  best:"Any decision where you're unsure how much process it deserves — or where caution has become a habit.",
+  steps:["Ask: if this goes wrong, can we walk back through the door?","Two-way (reversible): decide fast, low ceremony, push it to whoever's closest.","One-way (irreversible/costly to undo): slow down, gather more input, raise the bar.","Watch for one-way-door treatment applied to two-way-door decisions — that's how organizations get slow.","Most decisions are two-way doors in disguise."],
+  example:"Trying a new pricing page is a two-way door (ship it, measure, revert). Acquiring a company is a one-way door (deliberate hard first).",
+  watch:"The common failure is the reverse: treating every reversible choice as if it were permanent, drowning small bets in process."},
+
+ {id:"regret",name:"Regret Minimization",origin:"Jeff Bezos",doms:["personal"],
+  attrs:["Values","Qualitative","Big life"],
+  desc:"Project yourself to the end of life and choose the path you'll least regret not having tried.",
+  map:[0.85,0.55],
+  fit:{rev:["permanent","costly"],clarity:["complex"],who:["solo"],shape:["values"]},
+  best:"Big, irreversible life forks — career leaps, moves, relationships — where logic stalls and values must lead.",
+  steps:["Picture yourself at 80, looking back.","Ask which choice you'd most regret NOT having attempted.","Note that we rarely regret trying and failing; we regret not trying.","Weight that future regret against present-day fear.","Choose the path that minimizes long-term regret."],
+  example:"Bezos used it to leave a secure Wall Street job for Amazon: at 80 he wouldn't regret trying and failing, but he would regret never attempting it.",
+  watch:"It biases toward bold action, which isn't always right — pair it with a reality check on downside you genuinely can't afford."},
+
+ {id:"101010",name:"10/10/10 Rule",origin:"Suzy Welch",doms:["personal"],
+  attrs:["Fast","Values","Emotional"],
+  desc:"Weigh a choice by how you'll feel about it in 10 minutes, 10 months, and 10 years.",
+  map:[0.45,0.4],
+  fit:{rev:["reversible","costly"],clarity:["clear","complicated"],who:["solo"],shape:["values"]},
+  best:"In-the-moment decisions where short-term emotion is fighting long-term interest.",
+  steps:["Name the decision.","How will I feel about it in 10 minutes?","In 10 months?","In 10 years?","Let the three horizons reveal whether you're over-weighting a passing feeling."],
+  example:"Confronting a friend feels awful in 10 minutes, fine in 10 months, and may have saved the friendship in 10 years — so you do it.",
+  watch:"Great for emotional clarity, weak for analytically complex trade-offs — it sorts feelings, not spreadsheets."},
+
+ {id:"wrap",name:"WRAP",origin:"Chip & Dan Heath",doms:["personal","business","team"],
+  attrs:["Process","Debiasing"],
+  desc:"A four-step process to counter the predictable biases that wreck decisions: Widen, Reality-test, Attain distance, Prepare to be wrong.",
+  map:[0.55,0.5],
+  fit:{rev:["costly","permanent"],clarity:["complicated","complex"],who:["solo","group"],shape:["compare","values","risks"]},
+  best:"Important decisions where you want to actively guard against tunnel vision and overconfidence.",
+  steps:["Widen your options: avoid narrow 'whether or not' framing; ask 'what else could I do?'","Reality-test your assumptions: seek disconfirming evidence; run small experiments.","Attain distance before deciding: use 10/10/10, or ask what you'd advise a friend.","Prepare to be wrong: set tripwires and bookend best/worst cases.","Revisit as new information arrives."],
+  example:"Instead of 'should I take this job, yes or no?', WRAP widens it to 'what are my three best career moves?', then reality-tests by talking to people who left that company.",
+  watch:"It's a checklist against bias, not a ranking method — pair it with something that actually scores the options."},
+
+ {id:"premortem",name:"Pre-mortem",origin:"Gary Klein",doms:["business","team","product"],
+  attrs:["Risk","Group","Qualitative"],
+  desc:"Imagine the decision has already failed, then work backward to explain why — surfacing risks while you can still act.",
+  map:[0.6,0.55],
+  fit:{rev:["costly","permanent"],clarity:["complicated","complex"],who:["group","solo"],shape:["risks"]},
+  best:"Just before committing to a plan, especially when the team feels suspiciously confident.",
+  steps:["State the decision/plan as if it's been made.","Jump forward in time: 'It's a year later and this failed badly.'","Each person privately writes every reason it failed.","Share and cluster the reasons.","Turn the biggest risks into mitigations, tripwires, or a reason to rethink."],
+  example:"Before a big launch, a pre-mortem surfaces 'support was overwhelmed' and 'a key integration broke' — both get owners and contingency plans.",
+  watch:"It only helps if dissent is safe — run it anonymously or the loudest optimist will silence the risks."},
+
+ {id:"hats",name:"Six Thinking Hats",origin:"Edward de Bono",doms:["team"],
+  attrs:["Group","Process","Creative"],
+  desc:"Have a group examine a decision from six deliberate angles in turn, so everyone thinks in parallel instead of arguing past each other.",
+  map:[0.45,0.5],
+  fit:{rev:["costly"],clarity:["complicated","complex"],who:["group"],shape:["compare","risks"]},
+  best:"Group discussions that go in circles because people are stuck defending fixed positions.",
+  steps:["White: the facts and data only.","Red: gut feelings and intuition, no justification needed.","Black: caution, risks, what could go wrong.","Yellow: benefits and best case.","Green: creativity and new options.","Blue: manage the process — sequence the hats and summarize.","Everyone wears the same hat at the same time."],
+  example:"A team evaluating a partnership spends five focused minutes per hat; the Black hat surfaces a contract risk the cheerleaders had glossed over.",
+  watch:"Can feel gimmicky if forced — works best with a facilitator who keeps it brisk and the hats genuinely separate."},
+
+ {id:"daci",name:"DACI",origin:"Intuit",doms:["team"],
+  attrs:["Roles","Group"],
+  desc:"Clarify who Drives, who Approves, who Contributes, and who's Informed — so a group decision actually gets made.",
+  map:[0.5,0.35],
+  fit:{rev:["costly","permanent"],clarity:["clear","complicated"],who:["group"],shape:["compare","risks"]},
+  best:"A decision is stalling because no one's sure who actually owns it or who has the final say.",
+  steps:["Driver: one person who keeps it moving and gathers input.","Approver: the single decision-maker (ideally one person).","Contributors: those consulted for expertise.","Informed: those told once it's decided.","Write it down before the work starts, and keep one Approver."],
+  example:"For a rebrand: design lead drives, the VP approves, marketing and legal contribute, the wider company is informed at launch.",
+  watch:"Multiple Approvers reintroduce the gridlock you were trying to fix — if you can't name one, you have a deeper org problem."},
+
+ {id:"rapid",name:"RAPID",origin:"Bain & Company",doms:["team","business"],
+  attrs:["Roles","Group"],
+  desc:"Assign decision roles — Recommend, Agree, Perform, Input, Decide — to untangle who does what in a complex decision.",
+  map:[0.55,0.4],
+  fit:{rev:["costly","permanent"],clarity:["complicated"],who:["group"],shape:["compare","risks"]},
+  best:"Cross-functional or organization-wide decisions where accountability is genuinely murky.",
+  steps:["Recommend: drives the proposal and the analysis.","Agree: must sign off (e.g. legal); can veto or negotiate.","Perform: will execute the decision.","Input: consulted before the recommendation (advisory, not binding).","Decide: the single accountable decision-maker.","Note the letters aren't a sequence — it's a role map."],
+  example:"For a pricing change: finance recommends, legal agrees, sales performs, product gives input, the CEO decides.",
+  watch:"Heavier than DACI; reserve it for genuinely complex, multi-stakeholder calls or the overhead isn't worth it."},
+
+ {id:"cba",name:"Cost-Benefit Analysis",origin:"Classic",doms:["business"],
+  attrs:["Quantitative","Compare"],
+  desc:"Translate the costs and benefits of an option into comparable terms (often money) to judge whether it's worth it.",
+  map:[0.55,0.25],
+  fit:{rev:["costly","permanent"],clarity:["clear","complicated"],who:["solo","group"],shape:["compare"]},
+  best:"Decisions whose consequences can reasonably be quantified and compared on a common scale.",
+  steps:["List all costs (upfront and ongoing, direct and indirect).","List all benefits over the same horizon.","Convert to a common unit where possible (money, time).","Discount future values if the horizon is long.","Compare net benefit across options; note what couldn't be quantified."],
+  example:"Buying a machine: weigh purchase + maintenance against labor saved over five years; net positive only past year three.",
+  watch:"What's hard to quantify (morale, brand, optionality) gets under-weighted precisely because it resists a number. Note it explicitly."},
+
+ {id:"ev",name:"Expected Value / Decision Tree",origin:"Probability theory",doms:["business","personal"],
+  attrs:["Quantitative","Uncertainty"],
+  desc:"Weigh each possible outcome by its probability and value to compare risky options on the same footing.",
+  map:[0.6,0.65],
+  fit:{rev:["costly","permanent"],clarity:["complicated","complex"],who:["solo","group"],shape:["compare","risks"]},
+  best:"Choices under quantifiable uncertainty — bets, investments, go/no-go gambles with estimable odds.",
+  steps:["Map the options and their possible outcomes as branches.","Estimate the probability of each outcome (they sum to 1 per branch).","Assign a value to each outcome.","Expected value = Σ (probability × value).","Compare EVs — but adjust for your real tolerance for ruin, not just the average."],
+  example:"A bet pays +$100 at 60% and −$100 at 40%: EV = +$20, so it's favorable across many tries.",
+  watch:"Expected value assumes you can survive the bad outcome and repeat the bet. For one-shot, ruinous downside, the average lies."},
+
+ {id:"inversion",name:"Inversion",origin:"Jacobi · Munger",doms:["business","personal","team","product"],
+  attrs:["Mental model","Fast"],
+  desc:"Instead of asking how to succeed, ask what would guarantee failure — then avoid those things.",
+  map:[0.4,0.55],
+  fit:{rev:["reversible","costly","permanent"],clarity:["complicated","complex"],who:["solo","group"],shape:["risks","values"]},
+  best:"When the path to success is murky but the ways to fail are easier to name.",
+  steps:["State the goal.","Flip it: 'What would reliably make this fail?'","Brainstorm every failure mode honestly.","Invert again: avoiding those becomes your plan.","Especially powerful for protecting downside and avoiding stupidity rather than chasing brilliance."],
+  example:"To 'have a great team', invert: what destroys teams? Unclear ownership, no feedback, tolerating bad behavior — so eliminate those.",
+  watch:"Avoiding failure isn't the same as achieving excellence — use it to clear obstacles, then still do the positive work."},
+
+ {id:"secondorder",name:"Second-Order Thinking",origin:"Consequences of consequences",doms:["business","personal","team"],
+  attrs:["Mental model","Qualitative"],
+  desc:'Ask "and then what?" — trace the downstream and longer-term effects, not just the immediate result.',
+  map:[0.5,0.6],
+  fit:{rev:["costly","permanent"],clarity:["complicated","complex"],who:["solo","group"],shape:["risks","values"]},
+  best:"Decisions where the obvious first effect is good but the ripple effects could bite.",
+  steps:["Name the immediate (first-order) consequence.","Ask 'and then what happens?' — the second-order effect.","Keep going a level or two: third-order.","Watch for effects that reverse the first-order win.","Decide with the whole chain in view."],
+  example:"Cutting prices wins customers (first order), but trains them to wait for discounts and squeezes margin (second order).",
+  watch:"You can't trace every ripple forever — go far enough to catch reversals and incentives, then stop before paralysis."},
+
+ {id:"satisfice",name:"Satisficing vs Maximizing",origin:"Herbert Simon",doms:["personal","business"],
+  attrs:["Mental model","Fast"],
+  desc:"Decide whether 'good enough against clear criteria' beats an exhausting search for the absolute best.",
+  map:[0.3,0.3],
+  fit:{rev:["reversible"],clarity:["clear","complicated"],who:["solo"],shape:["compare"]},
+  best:"Low-to-medium stakes decisions where the search itself is costly and perfectionism causes paralysis.",
+  steps:["Set your must-have criteria in advance ('good enough' bar).","Search options in turn.","Take the first one that clears the bar — stop searching.","Reserve maximizing (exhaustive search) for the few high-stakes, irreversible calls.","Notice when 'best' is costing more than it's worth."],
+  example:"Choosing a restaurant: a satisficer picks the first solid option and enjoys the night; a maximizer reads 40 reviews and arrives anxious.",
+  watch:"The skill is matching strategy to stakes — satisfice the small stuff, maximize the rare decisions that truly warrant it."},
+
+ {id:"proscons",name:"Pros & Cons (Moral Algebra)",origin:"Benjamin Franklin",doms:["personal"],
+  attrs:["Fast","Qualitative"],
+  desc:"Franklin's method: list reasons for and against, then cancel items of roughly equal weight until the balance is clear.",
+  map:[0.35,0.3],
+  fit:{rev:["reversible","costly"],clarity:["clear"],who:["solo"],shape:["compare","values"]},
+  best:"A single yes/no choice you want to think through quickly and honestly.",
+  steps:["Draw two columns: Pro and Con.","Over a day or two, write every reason as it occurs to you.","Estimate the weight of each entry.","Strike out a Pro against a Con (or several) of equal combined weight.","See what's left standing — that's your answer."],
+  example:"Franklin literally crossed off a strong Pro against two medium Cons; whatever survived the cancellation pointed the way.",
+  watch:"Easy to bias by padding one column — the cancellation step, not the listing, is where the honesty lives."}
+];
+
+/* ========================================================= UTIL */
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const domClass=d=>d; // business/personal/product/team
+function domTag(d){return `<span class="tag-dom ${d}">${({business:'Biz',personal:'Personal',product:'Product',team:'Team'})[d]}</span>`}
+
+/* ========================================================= TABS */
+$$('.tab').forEach(t=>t.addEventListener('click',()=>{
+  $$('.tab').forEach(x=>x.setAttribute('aria-selected','false'));
+  t.setAttribute('aria-selected','true');
+  $$('.view').forEach(v=>v.classList.remove('active'));
+  $('#view-'+t.dataset.view).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}));
+
+/* ========================================================= MATCH: quiz + map + recs */
+const QUESTIONS=[
+ {key:'rev',q:'How reversible is it?',opts:[['reversible','Easily undone','two-way door'],['costly','Costly to undo','some lock-in'],['permanent','Effectively permanent','one-way door']]},
+ {key:'clarity',q:'How knowable is the situation?',opts:[['clear','Clear & familiar','known cause→effect'],['complicated','Complicated','expertise can solve it'],['complex','Genuinely uncertain','novel, emergent'],['crisis','Crisis — act now','no time to analyze']]},
+ {key:'who',q:'Who decides?',opts:[['solo','Just me','solo call'],['group','A group / team','needs alignment']]},
+ {key:'shape',q:'What shape is the decision?',opts:[['compare','Comparing options','a few concrete choices'],['prioritize','Prioritizing a list','sequencing many items'],['values','A big values call','life / direction'],['risks','Surfacing risks','before committing']]}
+];
+const answers={};
+function renderQuiz(){
+  $('#quiz').innerHTML=QUESTIONS.map((Q,i)=>`
+    <div class="qblock">
+      <div class="qhead"><span class="qnum">Q${i+1}</span><span class="qtext">${Q.q}</span></div>
+      <div class="opts">${Q.opts.map(o=>`
+        <button class="opt" role="button" aria-pressed="${answers[Q.key]===o[0]}" data-key="${Q.key}" data-val="${o[0]}">
+          ${o[1]}<small>${o[2]}</small></button>`).join('')}
+      </div>
+    </div>`).join('');
+  $$('#quiz .opt').forEach(b=>b.addEventListener('click',()=>{
+    const k=b.dataset.key, v=b.dataset.val;
+    answers[k]= answers[k]===v ? undefined : v;
+    renderQuiz(); update();
+  }));
+}
+$('#resetQuiz').addEventListener('click',()=>{Object.keys(answers).forEach(k=>delete answers[k]);renderQuiz();update();});
+
+/* scoring */
+function fwBreadth(f){return ['rev','clarity','who','shape'].reduce((s,k)=>s+(f.fit[k]?f.fit[k].length:0),0);}
+function scoreFW(f){
+  let s=0;const reasons=[];
+  for(const k of ['rev','clarity','who','shape']){
+    const a=answers[k];
+    if(a && f.fit[k] && f.fit[k].includes(a)){s++;reasons.push(k);}
+  }
+  return {s,reasons};
+}
+const reasonText={
+  rev:{reversible:'fits reversible calls',costly:'handles real lock-in',permanent:'built for irreversible stakes'},
+  clarity:{clear:'suits clear situations',complicated:'good for knowable complexity',complex:'works under true uncertainty',crisis:'designed for fast crises'},
+  who:{solo:'works solo',group:'made for groups'},
+  shape:{compare:'compares options',prioritize:'prioritizes a list',values:'handles values calls',risks:'surfaces risks'}
+};
+
+/* map render */
+const MAP={x0:54,y0:24,w:356,h:280};
+function mapX(v){return MAP.x0+v*MAP.w}
+function mapY(v){return MAP.y0+(1-v)*MAP.h} // higher uncertainty = higher on chart
+function renderMap(){
+  const svg=$('#map');
+  const grid=`
+    <rect x="${MAP.x0}" y="${MAP.y0}" width="${MAP.w}" height="${MAP.h}" fill="none" stroke="var(--line)" />
+    <line x1="${MAP.x0+MAP.w/2}" y1="${MAP.y0}" x2="${MAP.x0+MAP.w/2}" y2="${MAP.y0+MAP.h}" stroke="var(--line-soft)" stroke-dasharray="3 4"/>
+    <line x1="${MAP.x0}" y1="${MAP.y0+MAP.h/2}" x2="${MAP.x0+MAP.w}" y2="${MAP.y0+MAP.h/2}" stroke="var(--line-soft)" stroke-dasharray="3 4"/>
+    <text class="axis-label" x="${MAP.x0+MAP.w/2}" y="${MAP.y0+MAP.h+22}" text-anchor="middle">Reversibility →</text>
+    <text class="axis-label" transform="translate(${MAP.x0-30},${MAP.y0+MAP.h/2}) rotate(-90)" text-anchor="middle">Uncertainty →</text>
+    <text class="quad-label" x="${MAP.x0+6}" y="${MAP.y0+14}">explore / experiment</text>
+    <text class="quad-label" x="${MAP.x0+MAP.w-6}" y="${MAP.y0+14}" text-anchor="end">deliberate hard</text>
+    <text class="quad-label" x="${MAP.x0+6}" y="${MAP.y0+MAP.h-8}">act fast</text>
+    <text class="quad-label" x="${MAP.x0+MAP.w-6}" y="${MAP.y0+MAP.h-8}" text-anchor="end">analyze / compare</text>`;
+  const anyAns=Object.keys(answers).some(k=>answers[k]);
+  const nodes=FW.filter(f=>f.map).map(f=>{
+    const {s}=scoreFW(f);
+    const hot = anyAns && s>=2;
+    const dim = anyAns && s<2;
+    const c=primaryDomColor(f);
+    return `<g class="node ${hot?'hot':''} ${dim?'dim':''}" data-id="${f.id}" tabindex="0" role="button" aria-label="${f.name}">
+      <circle cx="${mapX(f.map[0]).toFixed(1)}" cy="${mapY(f.map[1]).toFixed(1)}" r="${hot?8:6}" fill="${c}" fill-opacity=".85" stroke="${c}"/>
+      <text x="${mapX(f.map[0]).toFixed(1)}" y="${(mapY(f.map[1])-11).toFixed(1)}" text-anchor="middle">${f.name.split(' ').slice(0,2).join(' ')}</text>
+    </g>`;
+  }).join('');
+  svg.innerHTML=grid+nodes;
+  $$('#map .node').forEach(n=>{
+    const open=()=>openDrawer(n.dataset.id);
+    n.addEventListener('click',open);
+    n.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});
+  });
+}
+function primaryDomColor(f){const m={business:'var(--biz)',personal:'var(--personal)',product:'var(--product)',team:'var(--team)'};return m[f.doms[0]];}
+
+/* recommendations */
+function renderRecs(){
+  const anyAns=Object.keys(answers).some(k=>answers[k]);
+  const box=$('#recs');
+  if(!anyAns){box.innerHTML=`<div class="empty-rec">Answer a question above to see matched frameworks ranked here.</div>`;return;}
+  const ranked=FW.map(f=>({f,...scoreFW(f)})).filter(r=>r.s>0).sort((a,b)=>b.s-a.s||fwBreadth(a.f)-fwBreadth(b.f)||a.f.name.localeCompare(b.f.name)).slice(0,5);
+  if(!ranked.length){box.innerHTML=`<div class="empty-rec">No strong match yet — try adjusting your answers.</div>`;return;}
+  box.innerHTML=`<p class="sectlabel">Recommended for you</p>`+ranked.map((r,i)=>{
+    const c=primaryDomColor(r.f);
+    const why=r.reasons.map(k=>reasonText[k][answers[k]]).filter(Boolean);
+    const whyStr=why.length?why.join(' · '):'broad fit';
+    return `<button class="rec" style="border-left-color:${c}" data-id="${r.f.id}">
+      <span class="rank">${i+1}</span>
+      <span class="body">
+        <span class="name">${r.f.name}<span class="chip" style="color:${c}">${({business:'biz',personal:'personal',product:'product',team:'team'})[r.f.doms[0]]}</span></span>
+        <span class="why"><b>Why:</b> ${whyStr}.</span>
+      </span></button>`;
+  }).join('');
+  $$('#recs .rec').forEach(b=>b.addEventListener('click',()=>openDrawer(b.dataset.id)));
+}
+function update(){renderMap();renderRecs();}
+
+/* ========================================================= LIBRARY */
+const DOMS=['business','personal','product','team'];
+const ATTRS=['Quantitative','Qualitative','Fast','Prioritization','Risk','Group','Solo or group','Values','Mental model','Diagnostic'];
+const fstate={doms:new Set(),attrs:new Set(),q:''};
+function renderFilterChips(){
+  $('#domFilters').innerHTML='<span class="frow-label">Domain</span>'+DOMS.map(d=>
+    `<button class="fchip dom-${d}" aria-pressed="false" data-dom="${d}">${D[d]}</button>`).join('');
+  $('#attrFilters').innerHTML='<span class="frow-label">Traits</span>'+ATTRS.map(a=>
+    `<button class="fchip attr" aria-pressed="false" data-attr="${a}">${a}</button>`).join('');
+  $$('#domFilters .fchip').forEach(b=>b.addEventListener('click',()=>{toggle(fstate.doms,b.dataset.dom);b.setAttribute('aria-pressed',fstate.doms.has(b.dataset.dom));renderCards();}));
+  $$('#attrFilters .fchip').forEach(b=>b.addEventListener('click',()=>{toggle(fstate.attrs,b.dataset.attr);b.setAttribute('aria-pressed',fstate.attrs.has(b.dataset.attr));renderCards();}));
+}
+function toggle(set,v){set.has(v)?set.delete(v):set.add(v);}
+$('#search').addEventListener('input',e=>{fstate.q=e.target.value.toLowerCase().trim();renderCards();});
+function matchFilters(f){
+  if(fstate.doms.size && !f.doms.some(d=>fstate.doms.has(d)))return false;
+  if(fstate.attrs.size && !f.attrs.some(a=>fstate.attrs.has(a)))return false;
+  if(fstate.q){
+    const hay=(f.name+' '+f.origin+' '+f.desc+' '+f.best+' '+f.attrs.join(' ')+' '+f.doms.join(' ')).toLowerCase();
+    if(!hay.includes(fstate.q))return false;
+  }
+  return true;
+}
+function renderCards(){
+  const list=FW.filter(matchFilters);
+  $('#count').textContent=`${list.length} of ${FW.length}`;
+  const wrap=$('#cards');
+  if(!list.length){wrap.innerHTML=`<div class="noresults">Nothing matches those filters. Clear a few and try again.</div>`;return;}
+  wrap.innerHTML=list.map(f=>{
+    const c=primaryDomColor(f);
+    return `<button class="card" style="--accent:${c}" data-id="${f.id}">
+      <div class="ctop"><div><div class="cname">${f.name}</div><div class="corigin">${f.origin}</div></div></div>
+      <div class="cdesc">${f.desc}</div>
+      <div class="ctags">${f.doms.map(domTag).join('')}${f.attrs.slice(0,2).map(a=>`<span class="tag-attr">${a}</span>`).join('')}</div>
+    </button>`;
+  }).join('');
+  $$('#cards .card').forEach(b=>b.addEventListener('click',()=>openDrawer(b.dataset.id)));
+}
+
+/* ========================================================= DRAWER */
+let lastFocused=null;
+function openDrawer(id){
+  const f=FW.find(x=>x.id===id);if(!f)return;
+  lastFocused=document.activeElement;
+  const c=primaryDomColor(f);
+  $('#drawerBody').innerHTML=`
+    <button class="dr-close" id="drClose" aria-label="Close">×</button>
+    <div class="dr-origin">${f.origin}</div>
+    <div class="dr-name">${f.name}</div>
+    <div class="dr-tags">${f.doms.map(domTag).join('')}${f.attrs.map(a=>`<span class="tag-attr">${a}</span>`).join('')}</div>
+    <p style="font-size:15.5px;margin:0 0 4px">${f.desc}</p>
+    <div class="dr-sect"><h4>Best when</h4><p>${f.best}</p></div>
+    <div class="dr-sect"><h4>How to run it</h4><ol class="steps">${f.steps.map(s=>`<li>${s}</li>`).join('')}</ol></div>
+    <div class="dr-sect"><h4>Worked example</h4><div class="example">${f.example}</div></div>
+    <div class="dr-sect"><h4>Watch out</h4><div class="watch">${f.watch}</div></div>`;
+  $('#drawer').classList.add('open');$('#drawer').setAttribute('aria-hidden','false');
+  $('#scrim').classList.add('open');
+  $('#drClose').addEventListener('click',closeDrawer);
+  $('#drClose').focus();
+}
+function closeDrawer(){
+  $('#drawer').classList.remove('open');$('#drawer').setAttribute('aria-hidden','true');
+  $('#scrim').classList.remove('open');
+  if(lastFocused)lastFocused.focus();
+}
+$('#scrim').addEventListener('click',closeDrawer);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
+
+/* ========================================================= TOOLS */
+$$('#toolpick button').forEach(b=>b.addEventListener('click',()=>{
+  $$('#toolpick button').forEach(x=>x.setAttribute('aria-selected','false'));
+  b.setAttribute('aria-selected','true');
+  $$('.toolpane').forEach(p=>p.classList.remove('active'));
+  $('#tool-'+b.dataset.tool).classList.add('active');
+}));
+
+/* --- A: weighted matrix --- */
+let mOptions=['Option A','Option B','Option C'];
+let mCriteria=[{name:'Criterion 1',w:3},{name:'Criterion 2',w:2},{name:'Criterion 3',w:1}];
+let mScores={}; // `${oi}-${ci}` -> value
+function mKey(o,c){return o+'-'+c}
+function renderMatrix(){
+  const t=$('#matrixTable');
+  let head=`<tr><th style="text-align:left">Option ▼ / Criterion ▶</th>`+
+    mCriteria.map((c,ci)=>`<th><input class="namein" data-cname="${ci}" value="${esc(c.name)}" aria-label="Criterion name"><br><input class="wt" type="number" min="0" max="9" step="1" data-cwt="${ci}" value="${c.w}" aria-label="weight" title="weight"></th>`).join('')+
+    `<th>Total</th><th></th></tr>`;
+  const totals=mOptions.map((o,oi)=>{
+    let tot=0;mCriteria.forEach((c,ci)=>{tot+=(+(mScores[mKey(oi,ci)]||0))*(+c.w||0)});return tot;
+  });
+  const max=Math.max(...totals,0);
+  let body=mOptions.map((o,oi)=>{
+    const cells=mCriteria.map((c,ci)=>`<td><input type="number" min="0" max="5" step="1" data-score="${oi}-${ci}" value="${mScores[mKey(oi,ci)]??''}" placeholder="1–5"></td>`).join('');
+    const win=totals[oi]===max&&max>0;
+    return `<tr data-row="${oi}" class="${win?'winner':''}"><td class="opt-name"><input class="namein" data-oname="${oi}" value="${esc(o)}" aria-label="Option name"></td>${cells}<td class="total" data-total="${oi}">${totals[oi]}</td><td><button class="miniicon" data-delopt="${oi}" title="remove">✕</button></td></tr>`;
+  }).join('');
+  t.innerHTML=head+body;
+  $$('#matrixTable [data-score]').forEach(i=>i.addEventListener('input',()=>{mScores[i.dataset.score]=i.value;recalcMatrix();}));
+  $$('#matrixTable [data-oname]').forEach(i=>i.addEventListener('input',()=>{mOptions[+i.dataset.oname]=i.value;}));
+  $$('#matrixTable [data-cname]').forEach(i=>i.addEventListener('input',()=>{mCriteria[+i.dataset.cname].name=i.value;}));
+  $$('#matrixTable [data-cwt]').forEach(i=>i.addEventListener('input',()=>{mCriteria[+i.dataset.cwt].w=+i.value;recalcMatrix();}));
+  $$('#matrixTable [data-delopt]').forEach(b=>b.addEventListener('click',()=>{const oi=+b.dataset.delopt;mOptions.splice(oi,1);mScores=reindexScores(oi);renderMatrix();}));
+}
+function recalcMatrix(){
+  const totals=mOptions.map((o,oi)=>mCriteria.reduce((s,c,ci)=>s+(+(mScores[mKey(oi,ci)]||0))*(+c.w||0),0));
+  const max=Math.max(...totals,0);
+  mOptions.forEach((o,oi)=>{
+    const cell=$(`#matrixTable [data-total="${oi}"]`); if(cell)cell.textContent=totals[oi];
+    const row=$(`#matrixTable [data-row="${oi}"]`); if(row)row.classList.toggle('winner',totals[oi]===max&&max>0);
+  });
+}
+function reindexScores(removed){const ns={};Object.keys(mScores).forEach(k=>{const[o,c]=k.split('-').map(Number);if(o===removed)return;const no=o>removed?o-1:o;ns[no+'-'+c]=mScores[k];});return ns;}
+$('#addOption').addEventListener('click',()=>{mOptions.push('Option '+String.fromCharCode(65+mOptions.length));renderMatrix();});
+$('#addCriterion').addEventListener('click',()=>{mCriteria.push({name:'Criterion '+(mCriteria.length+1),w:1});renderMatrix();});
+$('#copyMatrix').addEventListener('click',()=>{
+  const totals=mOptions.map((o,oi)=>mCriteria.reduce((s,c,ci)=>s+(+(mScores[mKey(oi,ci)]||0))*(+c.w||0),0));
+  const ranked=mOptions.map((o,i)=>({o,t:totals[i]})).sort((a,b)=>b.t-a.t);
+  let txt='WEIGHTED DECISION MATRIX\n\nCriteria (weight): '+mCriteria.map(c=>`${c.name} (${c.w})`).join(', ')+'\n\nRanking:\n'+ranked.map((r,i)=>`${i+1}. ${r.o} — ${r.t}`).join('\n');
+  copy(txt,'matrixCopied');
+});
+
+/* --- B: RICE --- */
+let rice=[{n:'Initiative 1',r:1000,i:2,c:80,e:2},{n:'Initiative 2',r:500,i:3,c:100,e:1},{n:'Initiative 3',r:5000,i:1,c:50,e:4}];
+function riceScore(x){return x.e>0?(x.r*x.i*(x.c/100))/x.e:0;}
+function renderRice(){
+  const ranked=[...rice.map((x,idx)=>({...x,idx,score:riceScore(x)}))].sort((a,b)=>b.score-a.score);
+  const max=Math.max(...ranked.map(r=>r.score),0);
+  let head=`<tr><th style="text-align:left">Initiative</th><th>Reach</th><th>Impact</th><th>Conf %</th><th>Effort</th><th>Score</th><th>Rank</th><th></th></tr>`;
+  let body=ranked.map((x,rank)=>{
+    const win=x.score===max&&max>0;
+    return `<tr class="${win?'winner':''}">
+      <td class="opt-name"><input class="namein" data-rn="${x.idx}" value="${esc(x.n)}"></td>
+      <td><input type="number" min="0" step="100" data-rr="${x.idx}" value="${x.r}"></td>
+      <td><input type="number" min="0" max="3" step="0.25" data-ri="${x.idx}" value="${x.i}"></td>
+      <td><input type="number" min="0" max="100" step="5" data-rc="${x.idx}" value="${x.c}"></td>
+      <td><input type="number" min="0.1" step="0.5" data-re="${x.idx}" value="${x.e}"></td>
+      <td class="total" data-sc="${x.idx}">${x.score?x.score.toFixed(0):'—'}</td>
+      <td class="mono">#${rank+1}</td>
+      <td><button class="miniicon" data-rdel="${x.idx}" title="remove">✕</button></td></tr>`;
+  }).join('');
+  $('#riceTable').innerHTML=head+body;
+  const liveScore=idx=>{const cell=$(`#riceTable [data-sc="${idx}"]`);if(cell){const s=riceScore(rice[idx]);cell.textContent=s?s.toFixed(0):'—';}};
+  $$('#riceTable [data-rn]').forEach(i=>i.addEventListener('input',()=>{rice[+i.dataset.rn].n=i.value;}));
+  $$('#riceTable [data-rr]').forEach(i=>{i.addEventListener('input',()=>{rice[+i.dataset.rr].r=+i.value;liveScore(+i.dataset.rr);});i.addEventListener('change',renderRice);});
+  $$('#riceTable [data-ri]').forEach(i=>{i.addEventListener('input',()=>{rice[+i.dataset.ri].i=+i.value;liveScore(+i.dataset.ri);});i.addEventListener('change',renderRice);});
+  $$('#riceTable [data-rc]').forEach(i=>{i.addEventListener('input',()=>{rice[+i.dataset.rc].c=+i.value;liveScore(+i.dataset.rc);});i.addEventListener('change',renderRice);});
+  $$('#riceTable [data-re]').forEach(i=>{i.addEventListener('input',()=>{rice[+i.dataset.re].e=+i.value;liveScore(+i.dataset.re);});i.addEventListener('change',renderRice);});
+  $$('#riceTable [data-rdel]').forEach(b=>b.addEventListener('click',()=>{rice.splice(+b.dataset.rdel,1);renderRice();}));
+}
+$('#addRice').addEventListener('click',()=>{rice.push({n:'Initiative '+(rice.length+1),r:1000,i:1,c:80,e:1});renderRice();});
+$('#copyRice').addEventListener('click',()=>{
+  const ranked=[...rice.map(x=>({...x,score:riceScore(x)}))].sort((a,b)=>b.score-a.score);
+  copy('RICE RANKING\n\n'+ranked.map((r,i)=>`${i+1}. ${r.n} — score ${r.score.toFixed(0)} (R${r.r} · I${r.i} · C${r.c}% · E${r.e})`).join('\n'),'riceCopied');
+});
+
+/* --- C: Eisenhower --- */
+let eisen=[];let eid=0;
+function renderEisen(){
+  [1,2,3,4].forEach(q=>{
+    const list=eisen.filter(t=>t.q===q);
+    $('#q'+q).innerHTML=list.length?list.map(t=>`
+      <div class="task"><span>${esc(t.text)}</span>
+        <span class="move">
+          <button data-mv="${t.id}" data-to="1" title="Do">DO</button>
+          <button data-mv="${t.id}" data-to="2" title="Schedule">SCH</button>
+          <button data-mv="${t.id}" data-to="3" title="Delegate">DEL</button>
+          <button data-mv="${t.id}" data-to="4" title="Delete">DROP</button>
+          <button data-del="${t.id}" title="remove">✕</button>
+        </span></div>`).join(''):`<div style="color:var(--ink-faint);font-size:12.5px">—</div>`;
+  });
+  $$('[data-mv]').forEach(b=>b.addEventListener('click',()=>{const t=eisen.find(x=>x.id==b.dataset.mv);t.q=+b.dataset.to;renderEisen();}));
+  $$('[data-del]').forEach(b=>b.addEventListener('click',()=>{eisen=eisen.filter(x=>x.id!=b.dataset.del);renderEisen();}));
+}
+function addEisen(){const v=$('#eisenInput').value.trim();if(!v)return;eisen.push({id:++eid,text:v,q:1});$('#eisenInput').value='';renderEisen();}
+$('#addEisen').addEventListener('click',addEisen);
+$('#eisenInput').addEventListener('keydown',e=>{if(e.key==='Enter')addEisen();});
+
+/* --- D: Pre-mortem --- */
+let reasons=[];
+function renderReasons(){
+  $('#pmReasons').innerHTML=reasons.length?reasons.map((r,i)=>`<li>${esc(r)} <button class="miniicon" data-pmdel="${i}" title="remove">✕</button></li>`).join(''):'<li style="list-style:none;color:var(--ink-faint);padding-left:0">No reasons yet — what could sink this?</li>';
+  $$('[data-pmdel]').forEach(b=>b.addEventListener('click',()=>{reasons.splice(+b.dataset.pmdel,1);renderReasons();}));
+}
+function addReason(){const v=$('#pmReasonInput').value.trim();if(!v)return;reasons.push(v);$('#pmReasonInput').value='';renderReasons();}
+$('#addReason').addEventListener('click',addReason);
+$('#pmReasonInput').addEventListener('keydown',e=>{if(e.key==='Enter')addReason();});
+$('#copyPm').addEventListener('click',()=>{
+  const d=$('#pmDecision').value.trim();
+  copy('PRE-MORTEM\n\nDecision: '+(d||'—')+'\n\nImagine it failed. Why?\n'+(reasons.length?reasons.map((r,i)=>`${i+1}. ${r}`).join('\n'):'(none yet)')+'\n\nNext: turn the biggest risks into mitigations, owners, and tripwires.','pmCopied');
+});
+
+/* helpers */
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function copy(txt,flagId){
+  navigator.clipboard?.writeText(txt).then(()=>flash(flagId)).catch(()=>{fallbackCopy(txt);flash(flagId);});
+}
+function fallbackCopy(t){const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}ta.remove();}
+function flash(id){const el=$('#'+id);if(!el)return;el.textContent='✓ copied';setTimeout(()=>el.textContent='',1800);}
+
+/* footnote */
+$('#footnote').textContent="Cedric's Decision Atlas — "+FW.length+' frameworks across business, personal, product, and team decisions. A thinking aid, not financial, legal, or medical advice; the call is always yours. Nothing here is stored or sent anywhere.';
+
+/* ========================================================= INIT */
+$('#fwcount').textContent=FW.length;
+renderQuiz();update();renderFilterChips();renderCards();renderMatrix();renderRice();renderEisen();renderReasons();
+</script>
+</body>
+</html>
